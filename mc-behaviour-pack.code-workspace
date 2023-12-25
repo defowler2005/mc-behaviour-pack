@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.autoSave": "off",
+		"editor.tabSize": 4,
+		"editor.wordWrap": "on",
+		"editor.fontSize": 14,
+		"editor.formatOnSave": true,
+		"git.enableSmartCommit": true
+	}
+}
