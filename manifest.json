@@ -27,7 +27,7 @@
             ]
         },
         {
-            "description": "Gametest Module",
+            "description": "",
             "type": "script",
             "language": "javascript",
             "entry": "scripts/library/Minecraft.js",
