@@ -44,7 +44,7 @@ class commandBuilder {
      * @returns {Array} - An array of commands that match the staff requirement.
      */
     getAllCommands(staff = false) {
-        return this.commands.filter(cmd => cmd.is_staff === staff);
+        return this.commands.filter(cmd => cmd.is_staff === staff ? true : false);
     }
 };
 
