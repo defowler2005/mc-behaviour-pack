@@ -7,13 +7,11 @@ import { commandBuild } from '../../../library/build/classes/commandBuilder.js';
  * @property {String} displayName - The string that the player will see.
  * @property {String} moduleId - The string to be used for the dynamic property.
  * @property {Number} indexId - The number for the index of the module.
- * @property {String} role - The role to indicate what modle is for who.
  */
-export const modulesList = [
+export const staffModulesList = [
     {
         displayName: 'Chat commands',
         moduleId: 'module:chat_commands',
-        role: 'staff',
         indexId: 0,
     }
 ];
