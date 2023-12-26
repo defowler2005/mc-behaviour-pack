@@ -10,7 +10,6 @@ world.beforeEvents.chatSend.subscribe((data) => {
     const player = data.sender;
     const message = data.message;
     const chat_commands = databaseBuild.get(staffModulesList[0].moduleId);
-    console.warn(chat_commands)
     const { x, y, z } = player.location;
     if (!message.startsWith(prefix)) return;
     data.cancel = true;
