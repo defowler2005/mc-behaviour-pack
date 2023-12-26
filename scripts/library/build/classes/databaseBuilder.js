@@ -6,7 +6,7 @@ import { world } from '@minecraft/server';
  */
 class databaseBuilder {
     /**
-     * Constructs a new DatabaseBuilder instance.
+     * Constructs a new databaseBuilder instance.
      * @constructor
      */
     constructor() { }
@@ -23,13 +23,11 @@ class databaseBuilder {
     /**
      * Gets the value of a dynamic property from the world.
      * @param {String} key - The key for the dynamic property.
-     * @returns {Number|Boolean|String|Null} The value of the dynamic property, or Null if it doesn't exist.
+     * @returns {Number|Boolean|String|Null} The value of the dynamic property, or null if it doesn't exist.
      */
     get(key) {
         const dynamicProperty = world.getDynamicProperty(key);
-        if (dynamicProperty === undefined) {
-            console.warn(`Dynamic property: ${key} does not exist!`);
-        }
+        if (dynamicProperty === undefined) console.warn(`Dynamic property: ${key} does not exist!`);
         return dynamicProperty;
     }
 
@@ -40,9 +38,7 @@ class databaseBuilder {
     delete(key) {
         if (world.getDynamicProperty(key) === undefined) {
             console.warn(`Dynamic property: ${key} does not exist!`);
-        } else {
-            world.setDynamicProperty(key, undefined);
-        }
+        } else world.setDynamicProperty(key, undefined);
     }
 }
 
