@@ -11,8 +11,8 @@ import { commandBuild } from '../../../library/build/classes/commandBuilder.js';
  */
 export const modulesList = [
     {
-        displayName: 'Chat ranks',
-        moduleId: 'chat_ranks',
+        displayName: 'Chat commands',
+        moduleId: 'module:chat_commands',
         role: 'staff',
         indexId: 0,
     }
@@ -26,7 +26,7 @@ export const modulesList = [
  * @property {Object} welcome - The welcome menu object.
  */
 
-const gui = {
+export const gui = {
     staff: {
         main: (player) => { }
     },
