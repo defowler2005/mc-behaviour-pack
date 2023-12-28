@@ -1,5 +1,6 @@
 import { world } from '@minecraft/server';
 import { commandBuild } from '../../../library/build/classes/commandBuilder.js';
+import { ButtonFormData } from '../../../library/build/classes/buttonFormData.js';
 
 /**
  * Array of modules for both staff and players.
@@ -27,7 +28,21 @@ export const staffModulesList = [
 export const gui = {
     staff: {
         main: (player) => {
-            console.warn('Staff main!');
+            const main = new ButtonFormData(player);
+            main.create(
+                {
+                    title: 'Title',
+                    body: [
+                        ['Body'],
+                        ['Body483']
+                    ],
+                    buttons: [
+                        ['Button1', 'textures/ui/gear']
+                    ],
+                }, (result) => {
+                    console.warn('Result1')
+                }
+            )
         }
     },
     player: {
