@@ -26,13 +26,19 @@ export const staffModulesList = [
 
 export const gui = {
     staff: {
-        main: (player) => { }
+        main: (player) => {
+            console.warn('Staff main!');
+        }
     },
     player: {
-        main: (player) => { }
+        main: (player) => {
+            console.warn('Player main!');
+        }
     },
     welcome: {
-        main: (player) => { }
+        main: (player) => {
+            console.warn('Welcome main!');
+        }
     }
 };
 
@@ -42,10 +48,12 @@ commandBuild.create(
         description: 'The interactive UI',
         is_staff: false
     }, (player) => {
-        player.sendMessage('§2Move to show the UI.')
+        player.sendMessage('§2Move to show the UI.');
     }, (player) => {
-        if (player.hasTag('staff')) return gui.staff.main(player);
-        else if (player.hasTag('welcome')) return gui.welcome.main(player);
-        else gui.player.main(player);
+        if (player.hasTag('staff')) gui.staff.main(player);
+        else if (!player.hasTag('welcome')) {
+            gui.welcome.main(player);
+            player.addTag('welcome');
+        } else gui.player.main(player);
     }
 );

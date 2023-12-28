@@ -6,6 +6,7 @@ import { staffModulesList } from '../example/commands/staff/gui.js';
 import { databaseBuild } from './build/classes/databaseBuilder.js';
 
 world.beforeEvents.chatSend.subscribe((data) => {
+    databaseBuild.set(staffModulesList[0].moduleId, true)
     const prefix = config.prefix;
     const player = data.sender;
     const message = data.message;
