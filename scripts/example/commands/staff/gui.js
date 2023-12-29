@@ -10,11 +10,11 @@ import { ButtonFormData } from '../../../library/build/classes/buttonFormData.js
  * @property {Number} indexId - The number for the index of the module.
  */
 export const staffModulesList = [
-    {
-        displayName: 'Chat commands',
-        moduleId: 'module:chat_commands',
-        indexId: 0,
-    }
+  {
+    displayName: 'Chat commands',
+    moduleId: 'module:chat_commands',
+    indexId: 0,
+  }
 ];
 
 /**
@@ -26,49 +26,49 @@ export const staffModulesList = [
  */
 
 export const gui = {
-    staff: {
-        main: (player) => {
-            const main = new ButtonFormData(player);
-            main.create(
-                {
-                    title: 'Title',
-                    body: [
-                        ['Body'],
-                        ['Body483']
-                    ],
-                    buttons: [
-                        ['Button1', 'textures/ui/gear']
-                    ],
-                }, (result) => {
-                    console.warn('Result1')
-                }
-            )
+  staff: {
+    main: (player) => {
+      const main = new ButtonFormData(player);
+      main.create(
+        {
+          title: 'Title',
+          body: [
+            ['Body'],
+            ['Body483']
+          ],
+          buttons: [
+            ['Button1', 'textures/ui/gear']
+          ],
+        }, (result) => {
+          console.warn('Result1')
         }
-    },
-    player: {
-        main: (player) => {
-            console.warn('Player main!');
-        }
-    },
-    welcome: {
-        main: (player) => {
-            console.warn('Welcome main!');
-        }
+      )
     }
+  },
+  player: {
+    main: (player) => {
+      console.warn('Player main!');
+    }
+  },
+  welcome: {
+    main: (player) => {
+      console.warn('Welcome main!');
+    }
+  }
 };
 
 commandBuild.create(
-    {
-        name: 'gui',
-        description: 'The interactive UI',
-        is_staff: false
-    }, (player) => {
-        player.sendMessage('§2Move to show the UI.');
-    }, (player) => {
-        if (player.hasTag('staff')) gui.staff.main(player);
-        else if (!player.hasTag('welcome')) {
-            gui.welcome.main(player);
-            player.addTag('welcome');
-        } else gui.player.main(player);
-    }
+  {
+    name: 'gui',
+    description: 'The interactive UI',
+    is_staff: false
+  }, (player) => {
+    player.sendMessage('§2Move to show the UI.');
+  }, (player) => {
+    if (player.hasTag('staff')) gui.staff.main(player);
+    else if (!player.hasTag('welcome')) {
+      gui.welcome.main(player);
+      player.addTag('welcome');
+    } else gui.player.main(player);
+  }
 );

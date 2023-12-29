@@ -1,15 +1,28 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {
-		"files.autoSave": "off",
-		"editor.tabSize": 4,
-		"editor.wordWrap": "on",
-		"editor.fontSize": 14,
-		"editor.formatOnSave": true,
-		"git.enableSmartCommit": true
-	}
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "editor.wordWrap": "on",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "editor.renderWhitespace": "all",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit"
+    },
+    "files.autoSave": "onFocusChange",
+    "files.autoSaveDelay": 500,
+    "workbench.colorTheme": "Pitch Black",
+    "explorer.confirmDelete": false,
+    "explorer.autoReveal": true,
+    "git.enableSmartCommit": true,
+    "git.autofetch": true,
+    "breadcrumbs.enabled": true,
+    "terminal.integrated.fontSize": 14,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+  }
 }

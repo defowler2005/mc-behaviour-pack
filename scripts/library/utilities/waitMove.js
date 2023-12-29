@@ -10,12 +10,12 @@ import { system } from "@minecraft/server";
  */
 
 export function waitMove(target, x, y, z, callback) {
-    const t = new Map();
-    t.set(target, [x, y, z]);
-    system.runInterval(() => {
-        for (const [target, [xOld, yOld, zOld]] of t) {
-            const { x: xc, y: yc, z: zc } = target.location;
-            if (xOld !== xc || yOld !== yc || zOld !== zc) system.run(() => t.delete(target) || callback());
-        }
-    })
+  const t = new Map();
+  t.set(target, [x, y, z]);
+  system.runInterval(() => {
+    for (const [target, [xOld, yOld, zOld]] of t) {
+      const { x: xc, y: yc, z: zc } = target.location;
+      if (xOld !== xc || yOld !== yc || zOld !== zc) system.run(() => t.delete(target) || callback());
+    }
+  })
 };

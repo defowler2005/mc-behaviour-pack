@@ -1,3 +1,3 @@
 export const config = {
-    prefix: 'DF.'
+  prefix: 'DF.'
 };
