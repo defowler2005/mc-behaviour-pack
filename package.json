@@ -1,0 +1,18 @@
+{
+  "name": "mc-behaviour-pack",
+  "version": "0.0.1",
+  "description": "defowler2005's behaviour pack.",
+  "main": "scripts/library/Minecraft.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/defowler2005/mc-behaviour-pack.git"
+  },
+  "keywords": [],
+  "author": "defowler2005",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/defowler2005/mc-behaviour-pack/issues"
+  },
+  "homepage": "https://github.com/defowler2005/mc-behaviour-pack#readme"
+}
