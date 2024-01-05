@@ -1,6 +1,6 @@
-import { world } from '@minecraft/server';
 import { commandBuild } from '../../../library/build/classes/commandBuilder.js';
-import { ButtonFormData } from '../../../library/build/classes/buttonFormData.js';
+import { buttonFormData } from '../../../library/build/classes/buttonFormData.js';
+import { optionFormData } from '../../../library/build/classes/optionFormData.js';
 
 /**
  * Array of modules for both staff and players.
@@ -13,6 +13,11 @@ export const staffModulesList = [
   {
     displayName: 'Chat commands',
     moduleId: 'module:chat_commands',
+    indexId: 0,
+  },
+  {
+    displayName: 'Chat ranks',
+    moduleId: 'module:chat_ranks',
     indexId: 0,
   }
 ];
@@ -28,22 +33,36 @@ export const staffModulesList = [
 export const gui = {
   staff: {
     main: (player) => {
-      const main = new ButtonFormData(player);
+      const main = new buttonFormData(player);
       main.create(
         {
-          title: 'Title',
+          title: 'Main staff menu',
           body: [
-            ['Body'],
-            ['Body483']
+            ['Select an options']
           ],
           buttons: [
-            ['Button1', 'textures/ui/gear']
+            ['Modules', 'textures/ui/gear']
           ],
         }, (result) => {
-          console.warn('Result1')
+          switch (result.selection) {
+            case 0:
+              gui.staff.modules(player);
+              break;
+            default:
+              return;
+          }
         }
       )
-    }
+    },
+    modules: (player) => {
+      const modules = new optionFormData(player);
+      modules.create(
+        {
+          title: 'Modules',
+          toggle: [],
+        },
+        (result) => { });
+    },
   },
   player: {
     main: (player) => {

@@ -5,7 +5,7 @@ import { ActionFormData } from '@minecraft/server-ui';
  * Represents a buttonFormData for displaying forms.
  * @class
  */
-export class ButtonFormData {
+export class buttonFormData {
   /**
    * The constructor.
    * @param {Player} player - The player associated with the form.
@@ -26,20 +26,10 @@ export class ButtonFormData {
   create(info, callback) {
     this.form.title(info.title);
 
-    if (info.body && info.body.length > 0) {
-      this.form.body(info.body.join('\n§r'));
-    }
+    if (info.body && info.body.length > 0) this.form.body(info.body.join('\n§r'));
 
-    if (info.buttons && info.buttons.length > 0) {
-      for (const [text, icon] of info.buttons) {
-        this.form.button(text, icon);
-      }
-    }
+    if (info.buttons && info.buttons.length > 0) for (const [text, icon] of info.buttons) this.form.button(text, icon);
 
-    this.form.show(this.player).then((result) => {
-      callback(result);
-    }).catch((error) => {
-      console.error(`Error while creating form ${info.title}: ${error}`);
-    });
+    this.form.show(this.player).then((result) => callback(result)).catch((error) => { console.error(`Error while creating form ${info.title}: ${error}`) });
   }
 };
