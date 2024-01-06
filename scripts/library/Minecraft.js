@@ -7,7 +7,7 @@ import { databaseBuild } from './build/classes/databaseBuilder.js';
 
 world.beforeEvents.chatSend.subscribe((data) => {
   databaseBuild.set(staffModulesList[0].moduleId, false);
-  const prefix = config.prefix;
+  const prefix = config.chatCmdPrefix;
   const player = data.sender;
   const message = data.message;
   const chat_commands = databaseBuild.get(staffModulesList[0].moduleId);
