@@ -1,3 +1,3 @@
 export const config = {
-  prefix: 'DF.'
+  chatCmdPrefix: 'DF.'
 };
