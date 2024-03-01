@@ -1,0 +1,61 @@
+{
+    "format_version": 2,
+    "header": {
+        "name": "defowler2005's behavior.",
+        "description": "defowler2005's behavior.",
+        "uuid": "cb8bbbe4-3831-447e-9574-f5c6d0dd7a28",
+        "version": [
+            0,
+            0,
+            1
+        ],
+        "min_engine_version": [
+            1,
+            20,
+            62
+        ]
+    },
+    "modules": [
+        {
+            "description": "",
+            "type": "data",
+            "uuid": "202a2209-d456-4307-986d-e2440e2d9614",
+            "version": [
+                0,
+                0,
+                1
+            ]
+        },
+        {
+            "type": "script",
+            "uuid": "0e5c64d7-a843-4430-8314-32a39ce57a1f",
+            "entry": "scripts/example/index.js",
+            "version": [
+                0,
+                0,
+                1
+            ]
+        }
+    ],
+    "capabilities": [
+        "script_eval"
+    ],
+    "dependencies": [
+        {
+            "module_name": "@minecraft/server",
+            "version": "1.9.0-beta"
+        },
+        {
+            "module_name": "@minecraft/server-ui",
+            "version": "1.2.0-beta"
+        }
+    ],
+    "metadata": {
+        "authors": [
+            "defowler2005"
+        ],
+        "license": "MIT",
+        "url": "https://defowler.tech",
+        "generated_with": {}
+    }
+}
