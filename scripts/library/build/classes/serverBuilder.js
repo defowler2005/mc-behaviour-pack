@@ -1,5 +1,6 @@
 import { system, world } from "@minecraft/server";
 import { configurations } from '../configurations.js';
+
 /**
  * A class for performing server related stuff.
  * @class

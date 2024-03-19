@@ -1,5 +1,7 @@
-import { world } from "@minecraft/server";
-import { commandBuild } from "../../../library/build/classes/commandBuilder.js";
+import { Player, world } from '@minecraft/server';
+import { commandBuild } from '../../../library/build/classes/commandBuilder.js';
+import { configurations } from '../../../library/build/configurations.js';
+import { buttonFormData } from '../../../library/build/classes/buttonFormData.js';
 
 /**
  * The gui object containg all UI's.
@@ -19,9 +21,21 @@ commandBuild.create(
         examples: ['gui', 'ui'],
         usage: ['gui', 'ui']
     }, (data, args) => {
-        console.warn('Command')
+        /**
+         * @type {Player}
+         */
+        const player = data.sender;
+        player.sendMessage('');
     }, (data, args) => {
-        player.sendMessage('')
-
+        /**
+         * @type {Player}
+         */
+        const player = data.sender;
+        if (player.hasTag('welcome')) {
+            gui.welcome.main(player);
+            return;
+        };
+        if (player.hasTag(configurations.staffTag)) gui.staff.main(player);
+        else return gui.player.main(player)
     }
 );

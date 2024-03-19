@@ -12,7 +12,7 @@ class commandBuilder {
          */
         this.commands = [];
         this.prefix = configurations.commandPrefix
-    }
+    };
 
     /**
      * Creates a new command and adds it to the list of commands.
