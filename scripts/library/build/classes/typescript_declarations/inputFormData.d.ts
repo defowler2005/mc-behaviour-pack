@@ -1,5 +1,5 @@
 import { Player } from "@minecraft/server";
-import { ModalFormResponse } from "@minecraft/server-ui";
+import { ModalFormResponse, ModalFormData } from "@minecraft/server-ui";
 
 /**
  * Represents a form with various input controls.

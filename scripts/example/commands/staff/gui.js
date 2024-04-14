@@ -9,6 +9,17 @@ import { buttonFormData } from '../../../library/build/classes/buttonFormData.js
 const gui = {
     staff: {
         main: (player) => { }
+    },
+    player: {
+        main: (player) => { 
+            const main = new buttonFormData(player);
+            main.create(
+                {
+                    title: 'Main',
+                    
+                }
+            )
+        }
     }
 };
 
@@ -25,7 +36,7 @@ commandBuild.create(
          * @type {Player}
          */
         const player = data.sender;
-        player.sendMessage('');
+        player.sendMessage('Move to show the UI.');
     }, (data, args) => {
         /**
          * @type {Player}
@@ -36,6 +47,6 @@ commandBuild.create(
             return;
         };
         if (player.hasTag(configurations.staffTag)) gui.staff.main(player);
-        else return gui.player.main(player)
+        else return gui.player.main(player);
     }
 );
