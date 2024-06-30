@@ -1,4 +1,4 @@
-import { system, world } from '@minecraft/server';
+import { world, system } from '@minecraft/server';
 import { commandBuild } from './build/classes/commandBuilder.js';
 import { configurations } from './build/configurations.js';
 import '../example/commands/staff/gui.js'

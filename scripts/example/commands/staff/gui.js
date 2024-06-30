@@ -1,7 +1,16 @@
-import { Player, world } from '@minecraft/server';
+import { Player } from '@minecraft/server';
 import { commandBuild } from '../../../library/build/classes/commandBuilder.js';
 import { configurations } from '../../../library/build/configurations.js';
 import { buttonFormData } from '../../../library/build/classes/buttonFormData.js';
+
+const moduleList = [
+    {
+        moduleDisplayName: 'Some toggle',
+        databaseId: 'module:some_toggle',
+        indexId: 0
+    }
+]
+
 //Errorful.
 /**
  * The gui object containg all UI's.
@@ -9,7 +18,7 @@ import { buttonFormData } from '../../../library/build/classes/buttonFormData.js
 const gui = {
     staff: {
         main: (player) => { },
-modules: (player) => {
+        modules: (player) => {
             const modules = new inputFormData(player);
             const formToggles = [];
             for (let i = 0; i < moduleList.length; i++) {
@@ -39,12 +48,19 @@ modules: (player) => {
         },
     },
     player: {
-        main: (player) => { 
+        main: (player) => {
             const main = new buttonFormData(player);
             main.create(
                 {
                     title: 'Main',
-                    
+                    body: [
+                        ['Select an option']
+                    ],
+                    button: [
+                        ['Button']
+                    ]
+                },  (result) => {
+
                 }
             )
         }
