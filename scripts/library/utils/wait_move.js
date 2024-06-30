@@ -20,5 +20,5 @@ export function waitMove(target, x, y, z, callback) {
                 callback();
             });
         }
-    })
+    }, 2);
 };

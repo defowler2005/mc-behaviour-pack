@@ -23,9 +23,9 @@ class commandBuilder {
             description: info.description,
             aliases: info.aliases || [],
             is_staff: info.is_staff || false,
-            cancel_message: info.cancel_message !== undefined ? info.cancel_message : true, // Default to true if not specified
-            callback: callback,
-            callbackWM: callbackWM
+            cancel_message: info.cancel_message || true,
+            callback,
+            callbackWM: callbackWM || (() => {})
         };
         this.commands.push(command);
     }
