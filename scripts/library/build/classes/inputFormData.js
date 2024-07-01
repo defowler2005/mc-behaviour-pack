@@ -54,15 +54,29 @@ export class inputFormData {
      * @param {Array<[string, string, string]>} info.textField - The text fields to add to the form, each represented by a name, hover text, and default value.
      * @param {Function} callback - The callback function to execute when the form is submitted.
      */
-    create (info, callback) {
+    create(info, callback) {
         try {
             this.form.title(info.title);
-            for (const [name, input0, input1, input2] of info?.slider) this.form.slider(name, input0, input1, input2);
-            for (const [name, input0] of info?.toggle) this.form?.toggle(name, input0);
-            for (const [name, options, defaultOpt] of info?.dropdown) this.form?.dropdown(name, options, defaultOpt);
-            for (const [name, hoverText, defaultText] of info?.textField) this.form.textField(name, hoverText, defaultText);
+
+            if (info?.slider?.length >= 1) {
+                for (const [name, input0, input1, input2] of info.slider) this.form.slider(name, input0, input1, input2);
+            };
+
+            if (info?.toggle?.length >= 1) {
+                for (const [name, input0] of info.toggle) this.form.toggle(name, input0);
+            };
+
+            if (info?.dropdown?.length >= 1) {
+                for (const [name, options, defaultOpt] of info.dropdown) this.form.dropdown(name, options, defaultOpt);
+            };
+
+            if (info?.textField?.length >= 1) {
+                for (const [name, hoverText, defaultText] of info.textField) this.form.textField(name, hoverText, defaultText);
+            };
 
             this.form.show(this.player).then((result) => callback(result));
-        } catch (error) {  console.error(`Error while creating the '${info.title}' form: ${error}`)  }
+        } catch (error) {
+            console.error(`An error occured while creating the buttonFormData form ${info.title}: ${error}\n${error.stack}`);
+        }
     }
 };

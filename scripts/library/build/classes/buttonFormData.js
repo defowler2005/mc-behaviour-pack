@@ -49,21 +49,15 @@ export class buttonFormData {
      * @param {Array<[String]>} info.body - The body text of the form.
      * @param {Array<[String, String]>} info.button - The buttons to add to the form, each represented by a name and an icon.
      * @param {Function} callback - The callback function to execute when the form is submitted.
-     * @returns {Object} - The created form data object.
      */
     create(info, callback) {
         try {
             this.form.title(info.title);
             this.form.body(info.body.join('\n§r'));
             for (const [name, icon] of info.button) this.form.button(name, icon);
-
-            this.form.show(this.player).then((result) => {
-                callback(result);
-            }).catch((error) => {
-                console.error(`Error while showing the ${info.title} form: ${error}`);
-            });
+            this.form.show(this.player).then((result) => callback(result))
         } catch (error) {
-            console.error(`Error while creating the ${info.title} form: ${error}\n${error.stack}`);
+            console.error(`An error occured while creating the buttonFormData form ${info.title}: ${error}\n${error.stack}`);
         }
     }
 };

@@ -17,6 +17,7 @@ class DatabaseBuilder {
     set(key, value) {
         try {
             world.setDynamicProperty(key, value ?? 0);
+           console.warn(`Set module ${key} to ${value}`);
         } catch (error) {
             //console.warn(`An error occurred while setting dynamic property '${key}' in database: ${error}`);
         }
