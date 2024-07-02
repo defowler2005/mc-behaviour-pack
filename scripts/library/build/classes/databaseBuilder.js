@@ -1,11 +1,11 @@
 import { world } from '@minecraft/server';
 
 /**
- * A class for interacting with Dynamic properties in a database-like system.
- */
+* A class for interacting with Dynamic properties in a database-like system.
+*/
 class DatabaseBuilder {
     /**
-     * Constructs a new DatabaseBuilder instance.
+     * Constructs a new databaseBuilder instance.
      */
     constructor() { }
 
@@ -17,11 +17,11 @@ class DatabaseBuilder {
     set(key, value) {
         try {
             world.setDynamicProperty(key, value ?? 0);
-           console.warn(`Set module ${key} to ${value}`);
+            //console.warn(`Set module ${key} to ${value}`);
         } catch (error) {
             //console.warn(`An error occurred while setting dynamic property '${key}' in database: ${error}`);
         }
-    }
+    };
 
     /**
      * Gets the value of a dynamic property from the world.
@@ -34,8 +34,7 @@ class DatabaseBuilder {
             //console.warn(`Dynamic property '${key}' does not exist!`);
             this.set(key, 0);
             return 0;
-        }
-        return value;
+        }; return value;
     };
 
     /**
@@ -46,8 +45,13 @@ class DatabaseBuilder {
         if (!world.getDynamicProperty(key)) {
             //console.warn(`Dynamic property '${key}' does not exist!`);
             return;
+        } else {
+            //this.set(key, 0);
         }
     };
 };
 
+/**
+* A class for interacting with Dynamic properties in a database-like system.
+*/
 export const Database = new DatabaseBuilder();

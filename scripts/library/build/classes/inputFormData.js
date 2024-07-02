@@ -72,11 +72,10 @@ export class inputFormData {
 
             if (info?.textField?.length >= 1) {
                 for (const [name, hoverText, defaultText] of info.textField) this.form.textField(name, hoverText, defaultText);
-            };
+            }; this.form.show(this.player).then((result) => callback(result));
 
-            this.form.show(this.player).then((result) => callback(result));
         } catch (error) {
-            console.error(`An error occured while creating the buttonFormData form ${info.title}: ${error}\n${error.stack}`);
+            console.error(`An error occured while creating the inputFormData form ${info.title}: ${error}\n${error.stack}`);
         }
     }
 };

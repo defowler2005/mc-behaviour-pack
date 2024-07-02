@@ -1,8 +1,12 @@
 /**
- * The commandBuilder class for managing commands.
+ * Represents a command builder for managing commands.
  */
 class commandBuilder {
     constructor() {
+        /**
+         * The array to contain all registered commands.
+         * @type {Array<Object>}
+         */
         this.commands = [];
     }
 
@@ -12,8 +16,10 @@ class commandBuilder {
      * @param {string} info.name - The name of the command.
      * @param {string} info.description - The description of the command.
      * @param {Array<string>} [info.aliases] - Optional aliases for the command.
+     * @param {Array<string>} [info.usage] - Optional usage for the command.
+     * @param {Array<string>} [info.example] - Optional example usage for the command.
      * @param {boolean} [info.is_staff] - Optional flag indicating if the command is for staff only.
-     * @param {boolean} [info.cancel_message] - Optional boolean to remove the command's message from game chat.
+     * @param {boolean} [info.cancel_message] - Optional boolean to remove the command message from game chat.
      * @param {Function} callback - The callback function to execute when the command is called.
      * @param {Function} callbackWM - The callback function for when the command is called with moderation.
      */
@@ -22,12 +28,13 @@ class commandBuilder {
             name: info.name,
             description: info.description,
             aliases: info.aliases || [],
+            usage: info.usage || [],
+            example: info.example || [],
             is_staff: info.is_staff || false,
             cancel_message: info.cancel_message || true,
             callback,
             callbackWM: callbackWM || (() => {})
-        };
-        this.commands.push(command);
+        }; this.commands.push(command);
     }
 
     /**
@@ -36,8 +43,19 @@ class commandBuilder {
      * @returns {Object|null} - The command object if found, otherwise null.
      */
     findCommand(cmd) {
-        return this.commands.find(cmdObj => cmdObj.name.includes(cmd) || cmdObj.aliases.includes(cmd)) || null;
+        return this.commands.find((cmdObj) => cmdObj.name.includes(cmd) || (cmdObj.aliases && cmdObj.aliases.includes(cmd))) || null;
     }
-}
 
+    /**
+     * Returns all commands that have been registered.
+     * @returns {Array<Object>} - An array containing all registered commands.
+     */
+    getAllCommands() {
+        return this.commands;
+    }
+};
+
+/**
+ * Instance of commandBuilder used for managing commands.
+ */
 export const commandBuild = new commandBuilder();

@@ -1,16 +1,12 @@
 import { world, Player, system } from '@minecraft/server';
-import { commandBuild } from '../../../library/build/classes/commandBuilder.js';
-import { buttonFormData } from '../../../library/build/classes/buttonFormData.js';
-import { inputFormData } from '../../../library/build/classes/inputFormData.js';
-import { Database } from '../../../library/build/classes/databaseBuilder.js';
+import { commandBuild, playerBuild, serverBuild, Database, inputFormData, buttonFormData } from '../../../library/Minecraft.js';
 import { configurations } from '../../../library/build/configurations.js';
-import { serverBuild } from '../../../library/build/classes/serverBuilder.js';
 
 /** The default basic toggle values for the GUI. */
-const toggle_modes = ['§2ON', '§4OFF'];
+export const basic_toggles = ['§4OFF', '§2ON'];
 
 /**
- * @typedef {Object} modules - The GUI modules object.
+ * @typedef {Object} modules - The GUI modules object, Note 'module' prefix is not required for the moduleId here.
  * @property {string} displayName - The display name of the module.
  * @property {string} moduleId - The ID to be used in the Database.
  * @property {string[]} toggles - The array of toggle options.
@@ -24,13 +20,13 @@ export const modules = {
         {
             disp_name: 'Player commands',
             module_id: 'apctoggle',
-            toggles: ['§4OFF', '§2ON'],
+            toggles: basic_toggles,
             index_id: 0
         },
         {
-            disp_name: 'Test',
-            module_id: 'test',
-            toggles: ['§4OFF', '§2ON', 'Another option'],
+            disp_name: 'Anti-Blues',
+            module_id: 'abtoggle',
+            toggles: ['§4OFF', '§2All combined', '§3Clear items', '§6Prevent placing blocks'],
             index_id: 1
         }
     ],
@@ -39,9 +35,9 @@ export const modules = {
     */
     player: [
         {
-            disp_name: '',
-            module_id: '',
-            toggles: ['§2ON', '§4OFF'],
+            disp_name: 'Display sidebar',
+            module_id: 'dsbtoggle',
+            toggles: basic_toggles,
             index_id: 0
         }
     ]
@@ -51,25 +47,60 @@ export const modules = {
  * The function to set the modules within the world.
  * @param {Player} player - The player object.
  * @param {typeof modules.player[number]} module - The module object.
- * @param {number} new_value - The new value to set for the module.
- * @param {number} old_value - The old value of the module before the update.
- * @type {(player: Player, module: typeof modules.player[number], new_value: number, old_value: number) => Function}
+ * @param {String} module_type - Indicates wether a module was designed for staff or non staff, 
+ * @param {Number} new_value - The new value to set for the module.
+ * @param {Number} old_value - The old value of the module before the update.
+ * @type {(player: Player, module: typeof modules.staff[number], new_value: number) => Function}
+ * @returns {Number} - 0 represents no issues arose, 1 represents one or more issues arose.
  */
-const setModule = (player, module, new_value) => {
-    const old_value = Number(Database.get(module.module_id));
+const setModule = (player, module, new_value, module_type) => {
+    try {
+        const old_value = Number(Database.get(`module:${module.module_id}`));
 
-    if (old_value !== new_value) {
-        //Somewhat errorful on setting DB.
-        console.warn(`old_value: ${old_value}\nnew_value: ${new_value}`);
-        serverBuild.tellServer(`§bPlayer §c${player.name} §bhas set the module §g${module.disp_name}§b to §r${module.toggles[new_value]}`);
-        Database.set(`module:${module.module_id}`, new_value);
+        if (old_value !== new_value) {
+            serverBuild.tellServer(`§bPlayer §c${player.name} §bhas set the module §g${module.disp_name}§b to §r${module.toggles[new_value]}`);
+            Database.set(`module:${module.module_id}`, new_value);
+            return 0;
+        }
+    } catch (error) {
+        console.warn(`An error occured while setting modules: ${error}\n${error.stack}`);
+        return 1;
     }
 };
 
 /**
  * The full GUI scheme.
  */
-const gui = {
+export const gui = {
+
+    blues: {
+        decide_fate: (player) => {
+            const decideForm = new inputFormData();
+            const abtoggle = Database.get(`module:${modules.staff[1].module_id}`);
+
+            decideForm.create(
+                {
+                    title: 'Decide your fate...',
+                    dropdown: [
+                        ['Anti-Blues', modules.staff[1].toggles, !!abtoggle]
+                    ]
+                },
+                (result) => {
+                    if (result.canceled) {
+                        serverBuild.tellSelf(blues, 'Anti-Blues > Alright your fate has been auto selected... §2All combined');
+                        Database.set(`module:${modules.staff[1].module_id}`, result.formValues[0]);
+                        return;
+                    }
+                    if (result.formValues[0] === 0) {
+                        serverBuild.tellSelf(blues, 'Anti-Blues > Alright your fate has been auto selected because §4OFF §ris not a valid option§r... §2All combined');
+                        Database.set(`module:${modules.staff[1].module_id}`, result.formValues[0]);
+                    }
+                    serverBuild.tellSelf(blues, `Anti-Blues > Alright your fate has been set to ${modules.staff[1].toggles[result.formValues[0]]} `);
+                    Database.set(`module:${modules.staff[1].module_id}`, result.formValues[0]);
+                }
+            )
+        }
+    },
     /**
      * The screen seen when the player first joined or sees this UI.
      */
@@ -172,7 +203,7 @@ const gui = {
                 let allStaffModuleDropdowns = [];
 
                 for (let module of modules.staff) {
-                    const current_value = Number(Database.get(module.module_id));
+                    const current_value = Number(Database.get(`module:${module.module_id}`));
                     if (module.toggles.length === 2) {
                         allStaffModuleToggles.push([module.disp_name, !!current_value]);
                     } else {
@@ -186,20 +217,16 @@ const gui = {
                         dropdown: allStaffModuleDropdowns,
                         toggle: allStaffModuleToggles
                     }, (result) => {
-                        if (!result.formValues.length < 0) return;
-                        result.formValues.forEach((v, i) => {
-                            const new_value = Number(v);
-                            const module = modules.staff[i];
-                            setModule(player, module, new_value);
-                        });
+                        if (result.canceled) return;
+                        result.formValues?.forEach((a, b) => {
+                            setModule(player, modules.staff[b], Number(a), 'staff_modules');
+                        })
                     }
                 );
             } catch (error) {
                 console.error(error)
-            }
-
+            };
         }
-
     }
 };
 
@@ -216,15 +243,15 @@ commandBuild.create(
         */
         const player = data.sender;
 
-        player.sendMessage('Move to show UI.');
+        serverBuild.tellSelf(player, '§aMove to show UI.');
     }, (data, args) => {
         /**
         * @type {Player}
         */
         const player = data.sender;
 
-        if (player.hasTag('welcome') === false) return gui.welcome.main(player);
-        if (player.hasTag(configurations.staff_tag) === true) return gui.staff.main(player);
+        if (playerBuild.hasTag(player, 'welcome') === false) return gui.welcome.main(player);
+        if (playerBuild.hasTag(player, configurations.staff_tag) === true) return gui.staff.main(player);
         else gui.player.main(player);
     }
 );
