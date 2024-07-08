@@ -17,7 +17,7 @@ export function waitMove(target, x, y, z, callback) {
             const { x: xc, y: yc, z: zc } = target.location;
             if (xOld !== xc || yOld !== yc || zOld !== zc) system.run(() => {
                 t.delete(target);
-                callback();
+                callback(target);
             });
         }
     }, 2);

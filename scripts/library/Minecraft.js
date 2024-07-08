@@ -21,9 +21,9 @@ world.beforeEvents.chatSend.subscribe((data) => {
 
         if (message.startsWith(prefix) === false) return; data.cancel = true;
         if (!command) return sender.sendMessage({ "rawtext": [{ "text": "§c" }, { "translate": "commands.generic.unknown", "with": [`§f${cmd}§c`] }] });
-        if (command.is_staff === true && playerBuild.hasTag(sender, configurations.staff_tag)) return sender.sendMessage('§cThis command is designed for staff only.');
+        if (command.is_staff === true && playerBuild.hasTag(sender, configurations.staff_tag) && sender.isOp() === false) return sender.sendMessage('§cThis command is designed for staff only.');
         if (command.cancel_message === false) data.cancel = false;
-        if (Database.get(modules.staff[0].module_id) !== 1 && playerBuild.hasTag(sender, configurations.staff_tag) === false) return sender.sendMessage('§cPlayer commands are disabled.');
+        if (Database.get(modules.staff[0].module_id) !== 1 && playerBuild.hasTag(sender, configurations.staff_tag) === false && sender.isOp() === false) return sender.sendMessage('§cPlayer commands are disabled.');
 
         system.run(() => {
             waitMove(sender, x, y, z, () => {

@@ -57,10 +57,15 @@ const setModule = (player, module, new_value, module_type) => {
     try {
         const old_value = Number(Database.get(`module:${module.module_id}`));
 
-        if (old_value !== new_value) {
-            serverBuild.tellServer(`§bPlayer §c${player.name} §bhas set the module §g${module.disp_name}§b to §r${module.toggles[new_value]}`);
-            Database.set(`module:${module.module_id}`, new_value);
-            return 0;
+        if (module_type === 'blues') {
+            `Anti-Blues > Alright your fate has been set to ${new_value === 0 ? 1 : module.toggles[new_value]} ${new_value === 0 ? '' : 'because §4OFF §ris not a valid option§r... §2All combined'}`
+        } else {
+
+            if (old_value !== new_value) {
+                serverBuild.tellServer(`§bPlayer §c${player.name} §bhas set the module §g${module.disp_name}§b to §r${module.toggles[new_value]}`);
+                Database.set(`module:${module.module_id}`, new_value);
+                return 0;
+            }
         }
     } catch (error) {
         console.warn(`An error occured while setting modules: ${error}\n${error.stack}`);
@@ -72,7 +77,6 @@ const setModule = (player, module, new_value, module_type) => {
  * The full GUI scheme.
  */
 export const gui = {
-
     blues: {
         decide_fate: (player) => {
             const decideForm = new inputFormData();
@@ -93,7 +97,8 @@ export const gui = {
                     }
                     if (result.formValues[0] === 0) {
                         serverBuild.tellSelf(blues, 'Anti-Blues > Alright your fate has been auto selected because §4OFF §ris not a valid option§r... §2All combined');
-                        Database.set(`module:${modules.staff[1].module_id}`, result.formValues[0]);
+                        Database.set(`module:${modules.staff[1].module_id}`, 1);
+                        setModule(player, modules.staff[1], 1, 'blues');
                     }
                     serverBuild.tellSelf(blues, `Anti-Blues > Alright your fate has been set to ${modules.staff[1].toggles[result.formValues[0]]} `);
                     Database.set(`module:${modules.staff[1].module_id}`, result.formValues[0]);
@@ -251,7 +256,7 @@ commandBuild.create(
         const player = data.sender;
 
         if (playerBuild.hasTag(player, 'welcome') === false) return gui.welcome.main(player);
-        if (playerBuild.hasTag(player, configurations.staff_tag) === true) return gui.staff.main(player);
+        if (playerBuild.hasTag(player, configurations.staff_tag) === true || player.isOp() === true) return gui.staff.main(player);
         else gui.player.main(player);
     }
 );

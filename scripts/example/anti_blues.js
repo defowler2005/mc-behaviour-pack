@@ -3,18 +3,18 @@ import { Database, inputFormData, playerBuild, serverBuild } from "../library/Mi
 import { gui, modules } from "./commands/staff/gui.js";
 import { waitMove } from "../library/utils/wait_move.js";
 
-const bluesName = 'defowler2OO5';
-
+const bluesName = 'defowler2OO5'//'Blues 8s bit';
+const knownItems = ['minecraft:redstone_block', 'minecraft:dropper', 'minecraft:dispenser'];
 system.runInterval(() => {
     try {
         const blues = world.getPlayers({ name: bluesName })[0];
-        const abtoggle = Database.get(`module:${modules.staff[1].module_id}`);
+        const abtoggle = Number(Database.get(`module:${modules.staff[1].module_id}`));
 
         if (abtoggle === 1 || abtoggle === 2) {
             playerBuild.getInventory(blues).forEach((itemObj) => {
-                if (['minecraft:redstone_block', 'minecraft:dropper', 'minecraft:dispenser'].includes(itemObj.item)) {
-                    itemObj.inventory?.clearAll();
-                    serverBuild.tellSelf(blues, `Anti-Blues > Cleared ${itemObj.item.replace('minecraft:', '').replace('_', ' ')} inventory :(`);
+                if (knownItems.includes(itemObj.item.typeId)) {
+                    itemObj.inventory.getSlot(itemObj.slot).setItem();
+                    serverBuild.tellSelf(blues, `§cAnti-Blues > §gCleared §9${itemObj.item.typeId.replace('minecraft:', '').replace('_', ' ')} from ${bluesName}§g inventory :(`);
                 }
             })
         }
@@ -28,27 +28,12 @@ system.runInterval(() => {
 }, 1);
 
 world.beforeEvents.playerPlaceBlock.subscribe((data) => {
-    const abtoggle = Database.get(`module:${modules.staff[1].module_id}`);
+    const abtoggle = Number(Database.get(`module:${modules.staff[1].module_id}`));
     const blues = data.player;
-
+    console.warn(abtoggle, blues.nameTag !== bluesName)
     if (abtoggle !== 1 && abtoggle !== 2) return;
     if (blues.nameTag !== bluesName) return;
 
     data.cancel = true;
-    serverBuild.tellSelf(blues, 'Anti-Blues > Anti-Place block prevented you from placing any blocks :(');
-});
-
-world.afterEvents.playerSpawn.subscribe((data) => {
-    //Errorful.
-    const abtoggle = Database.get(`module:${modules.staff[1].module_id}`);
-    const blues = world.getPlayers({ name: data.player.nameTag })[0];
-    if (abtoggle === 0) return;
-
-    if (blues.nameTag === bluesName) {
-        world.sendMessage((`${typeof blues} \nabtoggle: ${abtoggle}`));
-
-        waitMove(blues, blues.location.x, blues.location.y, blues.location.z, () => {
-            gui.blues.decide_fate(blues);
-        });
-    }
+    serverBuild.tellSelf(blues, '§cAnti-Blues > Anti-Place §gblock prevented you from placing any blocks :(');
 });
