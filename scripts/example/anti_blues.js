@@ -31,8 +31,7 @@ world.beforeEvents.playerPlaceBlock.subscribe((data) => {
     const blues = data.player;
     //console.warn(abtoggle, blues.nameTag !== bluesName);
 
-    if (abtoggle !== 1 && abtoggle !== 2) return;
-    if (blues.nameTag !== bluesName) return;
+    if (abtoggle !== 1 && abtoggle !== 2 && blues.nameTag !== bluesName) return;
 
     data.cancel = true;
     serverBuild.tellSelf(blues, '§cAnti-Blues > Anti-Place §gblock prevented you from placing any blocks :(');
