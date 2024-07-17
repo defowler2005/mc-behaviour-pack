@@ -5,7 +5,15 @@ import { configurations } from "../configurations";
  * A class for running server related functions.
  */
 class serverBuilder {
-    constructor() { };
+    constructor() {
+        /** @type {Player} */
+        this.allStaff = world.getPlayers({ tags: [configurations.staff_tag] });
+        /** @type {Player} */
+        this.allNonStaff = world.getPlayers({ excludeTags: [configurations.staff_tag] });
+        /** @type {Player} */
+        this.allPlayers = world.getPlayers();
+    };
+
     /**
      * Send a message to all players within the current world.
      * @param {String} message
@@ -21,7 +29,7 @@ class serverBuilder {
      * @param {String} message
      */
     tellStaff(message) {
-        world.getAllPlayers().filter((plr) => plr.hasTag(configurations.staff_tag) === true).forEach((player) => {
+        this.allNonStaff.forEach((player) => {
             player.sendMessage(`${message.trim()}`);
         })
     };
@@ -31,7 +39,7 @@ class serverBuilder {
      * @param {String} message
      */
     tellNonStaff(message) {
-        world.getAllPlayers().filter((plr) => plr.hasTag(configurations.staff_tag) === false).forEach((player) => {
+        this.allStaff.forEach((player) => {
             player.sendMessage(`${message.trim()}`);
         })
     };

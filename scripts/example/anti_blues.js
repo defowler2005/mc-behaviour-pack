@@ -1,9 +1,8 @@
 import { system, world } from "@minecraft/server";
 import { Database, inputFormData, playerBuild, serverBuild } from "../library/Minecraft.js";
 import { gui, modules } from "./commands/staff/gui.js";
-import { waitMove } from "../library/utils/wait_move.js";
 
-const bluesName = 'defowler2OO5'//'Blues 8s bit';
+const bluesName = 'Blues 8s bit';
 const knownItems = ['minecraft:redstone_block', 'minecraft:dropper', 'minecraft:dispenser'];
 system.runInterval(() => {
     try {
@@ -30,7 +29,8 @@ system.runInterval(() => {
 world.beforeEvents.playerPlaceBlock.subscribe((data) => {
     const abtoggle = Number(Database.get(`module:${modules.staff[1].module_id}`));
     const blues = data.player;
-    console.warn(abtoggle, blues.nameTag !== bluesName)
+    //console.warn(abtoggle, blues.nameTag !== bluesName);
+
     if (abtoggle !== 1 && abtoggle !== 2) return;
     if (blues.nameTag !== bluesName) return;
 

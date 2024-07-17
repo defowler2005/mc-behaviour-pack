@@ -24,9 +24,9 @@ export const modules = {
             index_id: 0
         },
         {
-            disp_name: 'Anti-Blues',
-            module_id: 'abtoggle',
-            toggles: ['§4OFF', '§2All combined', '§3Clear items', '§6Prevent placing blocks'],
+            disp_name: 'Chat Ranks',
+            module_id: 'crtoggle',
+            toggles: basic_toggles,
             index_id: 1
         }
     ],
@@ -44,6 +44,15 @@ export const modules = {
 };
 
 /**
+        {
+            disp_name: 'Anti-Blues',
+            module_id: 'abtoggle',
+            toggles: ['§4OFF', '§2All combined', '§3Clear items', '§6Prevent placing blocks'],
+            index_id: 1
+        }
+ */
+
+/**
  * The function to set the modules within the world.
  * @param {Player} player - The player object.
  * @param {typeof modules.player[number]} module - The module object.
@@ -53,25 +62,19 @@ export const modules = {
  * @type {(player: Player, module: typeof modules.staff[number], new_value: number) => Function}
  * @returns {Number} - 0 represents no issues arose, 1 represents one or more issues arose.
  */
-const setModule = (player, module, new_value, module_type) => {
+const setModule = (player, module, new_value) => {
     try {
         const old_value = Number(Database.get(`module:${module.module_id}`));
 
-        if (module_type === 'blues') {
-            `Anti-Blues > Alright your fate has been set to ${new_value === 0 ? 1 : module.toggles[new_value]} ${new_value === 0 ? '' : 'because §4OFF §ris not a valid option§r... §2All combined'}`
-        } else {
-
-            if (old_value !== new_value) {
-                serverBuild.tellServer(`§bPlayer §c${player.name} §bhas set the module §g${module.disp_name}§b to §r${module.toggles[new_value]}`);
-                Database.set(`module:${module.module_id}`, new_value);
-                return 0;
-            }
-        }
+        if (old_value === new_value) return;
+        serverBuild.tellServer(`§bPlayer §c${player.name} §bhas set the module §g${module.disp_name}§b to §r${module.toggles[new_value]}`);
+        Database.set(`module:${module.module_id}`, new_value);
     } catch (error) {
-        console.warn(`An error occured while setting modules: ${error}\n${error.stack}`);
+        console.warn(`An error occurred while setting modules: ${error}\n${error.stack}`);
         return 1;
     }
 };
+
 
 /**
  * The full GUI scheme.
@@ -98,7 +101,7 @@ export const gui = {
                     if (result.formValues[0] === 0) {
                         serverBuild.tellSelf(blues, 'Anti-Blues > Alright your fate has been auto selected because §4OFF §ris not a valid option§r... §2All combined');
                         Database.set(`module:${modules.staff[1].module_id}`, 1);
-                        setModule(player, modules.staff[1], 1, 'blues');
+                        setModule(player, modules.staff[1], 1);
                     }
                     serverBuild.tellSelf(blues, `Anti-Blues > Alright your fate has been set to ${modules.staff[1].toggles[result.formValues[0]]} `);
                     Database.set(`module:${modules.staff[1].module_id}`, result.formValues[0]);
@@ -224,7 +227,9 @@ export const gui = {
                     }, (result) => {
                         if (result.canceled) return;
                         result.formValues?.forEach((a, b) => {
-                            setModule(player, modules.staff[b], Number(a), 'staff_modules');
+                            setModule(player, modules.staff[b], Number(a));
+                            console.warn(modules.staff[b].disp_name)
+
                         })
                     }
                 );
