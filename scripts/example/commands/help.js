@@ -1,7 +1,7 @@
 import { ItemStack, Player, system, world } from "@minecraft/server";
 import { Database, commandBuild, playerBuild, serverBuild } from "../../library/Minecraft";
 import { configurations } from "../../library/build/configurations.js";
-import { gui } from './staff/gui.js'
+import { gui } from './staff/gui.js';
 
 commandBuild.create(
     {
@@ -9,7 +9,7 @@ commandBuild.create(
         description: 'Help on how to use a specific command or list all registered commands.',
         aliases: [],
         usage: [
-            'help [ command_name: String ] view_code'
+            'help [ command_name ] view_code'
         ],
         example: [
             'help',
@@ -34,19 +34,19 @@ commandBuild.create(
                 text.push(`§bName: §c${commandFound.name}`);
                 text.push(`§bDescription: §c${commandFound.description}`);
                 text.push(`§bAliases: §c${commandFound.aliases}`);
-                text.push(`§bUsage: §c${commandFound.usage.length ? commandFound.usage.join(`${prefix} | `) : 'none'}`);
-                text.push(`§bExample: §c${commandFound.example.length ? commandFound.example.join(' | ') : 'none'}`);
+                text.push(`§bUsage: §c${commandFound.usage.length ? commandFound.usage.join(`${prefix} | `) : '§rnone'}`);
+                text.push(`§bExample: §c${commandFound.example.length ? commandFound.example.join(' | ') : '§rnone'}`);
                 text.push(`§bFor staff only?: §c${commandFound.is_staff ? '§2Yes' : '§cNo'}`);
                 text.push(`§bCancel chat message?: §c${commandFound.cancel_message ? '§2Yes' : '§cNo'}`);
                 if (args[1] === 'view_code') {
-                    text.push(`callback[0]: ${commandFound.callback.toString()}\n\n`);
-                    text.push(`callbackWM[0]: ${commandFound.callbackWM.toString()}`);
+                    text.push(`callback: \n${commandFound.callback.toString()}\n\n`);
+                    text.push(`callbackWM: \n${commandFound.callbackWM.toString()}`);
                 }
             } else {
                 text.push(`§cCommand §f${args[0]}§c not found.`);
-            };
+            }
         } else {
-            text.push(`A list of all registered commands:`);
+            text.push(`§pA list of all registered commands: \n§cCustom command prefix§b${prefix}`);
             commandBuild.getAllCommands().forEach((command) => {
                 text.push(`§b${command.name}`);
             })

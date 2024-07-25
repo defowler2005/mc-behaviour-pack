@@ -26,13 +26,12 @@ commandBuild.create(
             '2',
             '3',
         ];
-        const optionsString = ['§4OFF', '§2All combined', '§3Clear items', '§6Prevent placing blocks'];
 
         if (options.includes(args[0])) {
-            serverBuild.tellServer(`Player ${player.name} has set Blues 8s bit's fate to ${optionsString[args[0]]}`);
+            serverBuild.tellServer(`Player ${player.name} has set Blues 8s bit's fate to ${modules.blues[0].toggles[args[0]]}`);
             Database.set(`module:${modules.blues[0].module_id}`, args[0]);
         } else {
-            serverBuild.tellSelf(player, `Invalid option or no arguments provided. Valid options include: \n\n${options.join(', ')}`);
+            serverBuild.tellSelf(player, `Invalid option or no arguments provided. Valid options include: \n${options.join(', ')}`);
         }
     }
 );

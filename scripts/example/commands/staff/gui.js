@@ -29,6 +29,12 @@ export const modules = {
             module_id: 'crtoggle',
             toggles: basic_toggles,
             index_id: 1
+        },
+        {
+            disp_name: 'Display sidebar',
+            module_id: 'dsbtoggle',
+            toggles: ['§4OFF', '§2Self stats', '§3Server stats', '§6Server logo only'],
+            index_id: 2
         }
     ],
     /**
@@ -38,7 +44,7 @@ export const modules = {
         {
             disp_name: 'Display sidebar',
             module_id: 'dsbtoggle',
-            toggles: basic_toggles,
+            toggles: ['§4OFF', '§2Self stats', '§3Server stats', '§6Server logo only'],
             index_id: 0
         }
     ],
@@ -83,7 +89,7 @@ export const gui = {
     blues: {
         decide_fate: (player) => {
             const decideForm = new inputFormData();
-            const abtoggle = Database.get(`module:${modules.blues[0].module_id}`);
+            const abtoggle = Number(Database.get(`module:${modules.blues[0].module_id}`));
             const isBlues = player.name === 'Blues 8s bit';
 
             decideForm.create(
@@ -93,19 +99,20 @@ export const gui = {
                         ['Anti-Blues', modules.blues[0].toggles, !!abtoggle]
                     ]
                 },
-                (result) => {
+                (formResults) => {
+                    const result = formResults.formValues[0];
                     if (result.canceled) {
-                        serverBuild.tellSelf(blues, 'Anti-Blues > Alright your fate has been auto selected... §2All combined');
-                        Database.set(`module:${modules.blues[0].module_id}`, result.formValues[0]);
+                        serverBuild.tellSelf(player, 'Anti-Blues > Alright your fate has been auto selected... §2All combined');
+                        Database.set(`module:${modules.blues[0].module_id}`, result);
                         return;
                     }
-                    if (result.formValues[0] === 0) {
+                    if (result === 0) {
                         serverBuild.tellSelf(player.name, 'Anti-Blues > Alright your fate has been auto selected because §4OFF §ris not a valid option§r... §2All combined');
                         Database.set(`module:${modules.blues[0].module_id}`, 1);
                         setModule(player, modules.blues[0], 1);
                     }
-                    serverBuild.tellSelf(player, `Anti-Blues > Alright your fate has been set to ${modules.blues[0].toggles[result.formValues[0]]}`);
-                    Database.set(`module:${modules.blues[0].module_id}`, result.formValues[0]);
+                    serverBuild.tellSelf(player, `Anti-Blues > Alright your fate has been set to ${modules.blues[0].toggles[result]}`);
+                    Database.set(`module:${modules.blues[0].module_id}`, result);
                 }
             )
         }
@@ -208,13 +215,19 @@ export const gui = {
             const kills = scoreTest(target, 'kills');
             const deaths = scoreTest(target, 'deaths');
             const killstreak = scoreTest(target, 'killstreak');
-        
+            const currentTpaChannel = scoreTest(player, 'tpa');
+            const recipient = world.getPlayers().filter((plr) => scoreTest(plr, 'tpa') === scoreTest(player, 'tpa') && player.name !== plr.name);
+
             stats.create(
                 {
-                    title: target === player ? 'Self stats' : `${target.name}'s stats`,
+                    title: target.name === player.name ? 'Self stats' : `${target.name}'s stats`,
                     body: [
                         ['§d§lCombat:'],
-                        [`§bKills §7:§c${kills} §bDeaths §7:§c${deaths} §bKillstreak §7:§c${killstreak}`]
+                        [`§bKills §7:§c${kills} §bDeaths §7:§c${deaths} §bKillstreak §7:§c${killstreak}`],
+                        ['\n'],
+                        [`§dTPA:`],
+                        [`§bCurrent TPA channel: §c${currentTpaChannel ? currentTpaChannel : 'No requests.'}`],
+                        [`§bCurrent TPA recipient: §c${recipient.name ? recipient.name : 'No requests.'}`]
                     ],
                     button: [
                         ['Back']
@@ -225,7 +238,21 @@ export const gui = {
                 }
             );
         },
-        
+        mainTpaMenu: (player) => {
+            const mainTpaMenu = new inputFormData(player);
+
+            mainTpaMenu.create(
+                {
+                    title: 'Main TPA menu',
+                    body: [
+                        ['Select an option']
+                    ]
+                }, (result) => {
+                    if (result.canceled) return;
+                    if (result.selection === 0) gui.tpa(player);
+                }
+            );
+        }
     },
     /**
      * The screen used if the player is staff.
@@ -312,10 +339,8 @@ commandBuild.create(
     {
         name: 'gui',
         description: 'The utility UI for easy usage',
-        usage: [
-            'gui'
-        ],
-        example: [],
+        usage: ['gui [ nonstaff ]'],
+        example: ['gui', 'gui'],
         aliases: ['ui'],
         is_staff: false,
         cancel_message: true
@@ -336,7 +361,7 @@ commandBuild.create(
             return gui.welcome.main(player);
         }
 
-        if ((playerBuild.hasTag(player, configurations.staff_tag) === true && args[0] !== 'nonstaff')) {
+        if (playerBuild.hasTag(player, configurations.staff_tag) && player.isOp() && args[0] !== 'nonstaff') {
             return gui.staff.main(player);
         } else {
             gui.player.main(player);

@@ -12,6 +12,6 @@ world.beforeEvents.chatSend.subscribe((data) => {
     const isStaff = sender.hasTag(configurations.staff_tag);
 
     if (allTags.length > 0 && Database.get(`module:${modules.staff[1].module_id}`) === 1) {
-        serverBuild.tellServer(`§8<§f${sender.nameTag}§8> [${isStaff ? '§aStaff§r, ' : ''}§r${allTags.map((tag) => tag.replace('rank:', '')?.replace('_', ' ')).join('§r, ')}§8]§r ${message}`);
+        serverBuild.tellServer(`§8<§f${sender.nameTag}§8> [${isStaff ? '§aStaff§8, ' : ''}§r${allTags.map((tag) => tag.replace('rank:', '')?.replace('_', ' ')).join('§8,§r ')}§8]§r ${message}`);
     } else serverBuild.tellServer(`§8<§f${sender.nameTag}§8> §r${isStaff ? '§8[§aStaff§8]' : ''}§r ${message}`);
 });

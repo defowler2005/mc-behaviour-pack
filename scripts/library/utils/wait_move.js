@@ -9,7 +9,7 @@ import { system } from "@minecraft/server";
  * @param {Function} callback - The callback function to execute after the player moves.
  */
 
-export function waitMove(target, x, y, z, callback) {
+export function waitMove(target, { x, y, z }, callback) {
     const t = new Map();
     t.set(target, [x, y, z]);
     system.runInterval(() => {
@@ -17,7 +17,7 @@ export function waitMove(target, x, y, z, callback) {
             const { x: xc, y: yc, z: zc } = target.location;
             if (xOld !== xc || yOld !== yc || zOld !== zc) system.run(() => {
                 t.delete(target);
-                callback(target);
+                callback({ initial_location: { x: xOld, y: yOld, z: zOld } });
             });
         }
     }, 2);

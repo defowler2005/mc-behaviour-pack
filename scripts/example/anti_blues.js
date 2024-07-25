@@ -4,10 +4,11 @@ import { gui, modules } from "./commands/staff/gui.js";
 
 const bluesName = 'Blues 8s bit';
 const knownItems = ['minecraft:redstone_block', 'minecraft:dropper', 'minecraft:dispenser'];
+
 system.runInterval(() => {
     try {
         const blues = world.getPlayers({ name: bluesName })[0];
-        const abtoggle = Number(Database.get(`module:${modules.staff[1].module_id}`));
+        const abtoggle = Number(Database.get(`module:${modules.blues[0].module_id}`));
 
         if (abtoggle === 1 || abtoggle === 2) {
             playerBuild.getInventory(blues).forEach((itemObj) => {
@@ -20,14 +21,12 @@ system.runInterval(() => {
     } catch (error) {
         const error_msg = `${error}`;
 
-        if (!error_msg.includes(`'getComponent' of undefined`)) {
-            console.warn(`An error occurred while running anti_blues: ${error_msg}\n${error.stack}`);
-        }
+        error_msg.includes(`'getComponent' of undefined`) ? console.warn(`An error occurred while running anti_blues: ${error_msg}\n${error.stack}`) : undefined;
     }
 }, 1);
 
 world.beforeEvents.playerPlaceBlock.subscribe((data) => {
-    const abtoggle = Number(Database.get(`module:${modules.staff[1].module_id}`));
+    const abtoggle = Number(Database.get(`module:${modules.blues[0].module_id}`));
     const blues = data.player;
     //console.warn(abtoggle, blues.nameTag !== bluesName);
 

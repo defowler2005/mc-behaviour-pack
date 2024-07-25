@@ -33,7 +33,7 @@ class commandBuilder {
             is_staff: info.is_staff || false,
             cancel_message: info.cancel_message || true,
             callback,
-            callbackWM: callbackWM || (() => {})
+            callbackWM: callbackWM || (() => { })
         }; this.commands.push(command);
     }
 
@@ -51,7 +51,7 @@ class commandBuilder {
      * @returns {Array<Object>} - An array containing all registered commands.
      */
     getAllCommands() {
-        return this.commands;
+        return this.commands.length > 0 ? this.commands : 0;
     }
 };
 
