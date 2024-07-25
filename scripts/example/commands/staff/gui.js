@@ -1,7 +1,8 @@
 import { world, Player, system } from '@minecraft/server';
 import { commandBuild, playerBuild, serverBuild, Database, inputFormData, buttonFormData } from '../../../library/Minecraft.js';
 import { configurations } from '../../../library/build/configurations.js';
-import { scoreTest } from '../../../library/utils/score_system.js';
+import { scoreTest, setScore } from '../../../library/utils/score_system.js';
+import { randomNumber } from '../../../library/utils/randomNumber.js';
 
 /** The default basic toggle values for the GUI. */
 export const basic_toggles = ['§4OFF', '§2ON'];
@@ -160,11 +161,13 @@ export const gui = {
                         ['Non staff player utility UI.']
                     ],
                     button: [
-                        ['Stats']
+                        ['Stats'],
+                        ['TPA options']
                     ]
                 }, (result) => {
                     if (result.canceled) return;
                     if (result.selection === 0) gui.player.statsSelection(player);
+                    if (result.selection === 1) gui.player.mainTpaMenu(player);
                 }
             );
         },
@@ -200,7 +203,7 @@ export const gui = {
                     ]
                 }, (result) => {
                     if (result.canceled) return;
-                    const target = allPlayers.find(plr => plr.name === allPlayers[result.formValues[0]].name);
+                    const target = allPlayers.find((plr) => plr.name === allPlayers[result.formValues[0]].name);
                     console.warn(target.name);
                     gui.player.stats(player, target);
                 }
@@ -239,17 +242,41 @@ export const gui = {
             );
         },
         mainTpaMenu: (player) => {
-            const mainTpaMenu = new inputFormData(player);
+            const mainTpaMenu = new buttonFormData(player);
 
             mainTpaMenu.create(
                 {
                     title: 'Main TPA menu',
                     body: [
                         ['Select an option']
+                    ],
+                    button: [
+                        ['Send a TPA request']
                     ]
                 }, (result) => {
                     if (result.canceled) return;
-                    if (result.selection === 0) gui.tpa(player);
+                    if (result.selection === 0) gui.player.tpaRequest(player);
+                }
+            );
+        },
+        tpaRequest: (player) => {
+            const tpaRequest = new inputFormData(player);
+            const allPlayers = world.getAllPlayers();
+
+            tpaRequest.create(
+                {
+                    title: 'Select a player',
+                    dropdown: [
+                        ['Players', allPlayers.map((plr) => plr.name), 0]
+                    ]
+                }, (result) => {
+                    if (result.canceled) return;
+                    const target = allPlayers.find((plr) => plr.name === allPlayers[result.formValues[0]].name);
+                    const randomNumberIndex = randomNumber(100, 9999999);
+                    setScore(player, 'tpa', randomNumberIndex);
+                    setScore(target, 'tpa', randomNumberIndex);
+                    target.sendMessage(`Player ${player.name} has sent a TPA request to you.`);
+                    player.sendMessage(`Successfully send a TPA request to ${target.name}.`);
                 }
             );
         }

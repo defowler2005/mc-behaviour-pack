@@ -17,9 +17,8 @@ export function scoreTest(player, objective) {
  * @param {Player} player
  * @param {String} objective
  */
-export function setNewScore(player, newValue, objective) {
+export function setScore(player, objective, newValue) {
     const obj = world.scoreboard.getObjective(objective);
 
-    const score = (obj ? obj.setScore(player, newValue) : 0);
-    return score;
+    (obj ? obj.setScore(player, newValue) : 0);
 };
