@@ -13,8 +13,13 @@
       "minecraft:is_hidden_when_invisible": {},
       "minecraft:type_family": {
         "family": [
-          "mob"
+          "mob",
+          "defowler2005"
         ]
+      },
+      "minecraft:nameable": {
+        "allow_name_tag_renaming": true,
+        "always_show": true
       },
       "minecraft:movement.basic": {},
       "minecraft:navigation.walk": {

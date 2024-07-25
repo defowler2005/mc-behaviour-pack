@@ -31,7 +31,7 @@ world.beforeEvents.chatSend.subscribe((data) => {
             }); command.callback(data, args);
         })
     } catch (error) {
-        console.warn(`An error occured while running Minecraft.js: ${error}\n${error.stack}`);
+        console.warn(`An error occured while running Minecraft.js main commmand center: ${error}\n${error.stack}`);
     }
 });
 

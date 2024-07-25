@@ -1,6 +1,7 @@
 import { world, Player, system } from '@minecraft/server';
 import { commandBuild, playerBuild, serverBuild, Database, inputFormData, buttonFormData } from '../../../library/Minecraft.js';
 import { configurations } from '../../../library/build/configurations.js';
+import { scoreTest } from '../../../library/utils/score_system.js';
 
 /** The default basic toggle values for the GUI. */
 export const basic_toggles = ['§4OFF', '§2ON'];
@@ -40,17 +41,16 @@ export const modules = {
             toggles: basic_toggles,
             index_id: 0
         }
-    ]
-};
-
-/**
+    ],
+    blues: [
         {
             disp_name: 'Anti-Blues',
             module_id: 'abtoggle',
             toggles: ['§4OFF', '§2All combined', '§3Clear items', '§6Prevent placing blocks'],
-            index_id: 1
+            index_id: 0
         }
- */
+    ]
+};
 
 /**
  * The function to set the modules within the world.
@@ -83,28 +83,29 @@ export const gui = {
     blues: {
         decide_fate: (player) => {
             const decideForm = new inputFormData();
-            const abtoggle = Database.get(`module:${modules.staff[1].module_id}`);
+            const abtoggle = Database.get(`module:${modules.blues[0].module_id}`);
+            const isBlues = player.name === 'Blues 8s bit';
 
             decideForm.create(
                 {
-                    title: 'Decide your fate...',
+                    title: isBlues ? `Decide your fate...` : 'Decide his fate',
                     dropdown: [
-                        ['Anti-Blues', modules.staff[1].toggles, !!abtoggle]
+                        ['Anti-Blues', modules.blues[0].toggles, !!abtoggle]
                     ]
                 },
                 (result) => {
                     if (result.canceled) {
                         serverBuild.tellSelf(blues, 'Anti-Blues > Alright your fate has been auto selected... §2All combined');
-                        Database.set(`module:${modules.staff[1].module_id}`, result.formValues[0]);
+                        Database.set(`module:${modules.blues[0].module_id}`, result.formValues[0]);
                         return;
                     }
                     if (result.formValues[0] === 0) {
-                        serverBuild.tellSelf(blues, 'Anti-Blues > Alright your fate has been auto selected because §4OFF §ris not a valid option§r... §2All combined');
-                        Database.set(`module:${modules.staff[1].module_id}`, 1);
-                        setModule(player, modules.staff[1], 1);
+                        serverBuild.tellSelf(player.name, 'Anti-Blues > Alright your fate has been auto selected because §4OFF §ris not a valid option§r... §2All combined');
+                        Database.set(`module:${modules.blues[0].module_id}`, 1);
+                        setModule(player, modules.blues[0], 1);
                     }
-                    serverBuild.tellSelf(blues, `Anti-Blues > Alright your fate has been set to ${modules.staff[1].toggles[result.formValues[0]]} `);
-                    Database.set(`module:${modules.staff[1].module_id}`, result.formValues[0]);
+                    serverBuild.tellSelf(player, `Anti-Blues > Alright your fate has been set to ${modules.blues[0].toggles[result.formValues[0]]}`);
+                    Database.set(`module:${modules.blues[0].module_id}`, result.formValues[0]);
                 }
             )
         }
@@ -139,9 +140,10 @@ export const gui = {
      * The screen used if the player is NOT staff.
      */
     player: {
-        /** * @param {Player} player */
+        /**
+         * @param {Player} player
+         */
         main: (player) => {
-            //console.warn('Non staff!');
             const main_player = new buttonFormData(player);
 
             main_player.create(
@@ -151,13 +153,79 @@ export const gui = {
                         ['Non staff player utility UI.']
                     ],
                     button: [
-                        ['Some btn']
+                        ['Stats']
                     ]
                 }, (result) => {
                     if (result.canceled) return;
+                    if (result.selection === 0) gui.player.statsSelection(player);
                 }
             );
-        }
+        },
+        statsSelection: (player) => {
+            const statsSelection = new buttonFormData(player);
+
+            statsSelection.create(
+                {
+                    title: 'Stats selection',
+                    body: [
+                        ['Select an option.']
+                    ],
+                    button: [
+                        ['Self stats'],
+                        ['Other stats']
+                    ]
+                }, (result) => {
+                    if (result.canceled) return;
+                    if (result.selection === 0) gui.player.stats(player);
+                    if (result.selection === 1) gui.player.otherStatsSelection(player);
+                }
+            );
+        },
+        otherStatsSelection: (player) => {
+            const statsSelection = new inputFormData(player);
+            const allPlayers = world.getAllPlayers();
+
+            statsSelection.create(
+                {
+                    title: 'Select a player',
+                    dropdown: [
+                        ['Players', allPlayers.map((plr) => plr.name), 0]
+                    ]
+                }, (result) => {
+                    if (result.canceled) return;
+                    const target = allPlayers.find(plr => plr.name === allPlayers[result.formValues[0]].name);
+                    console.warn(target.name);
+                    gui.player.stats(player, target);
+                }
+            );
+        },
+        /**
+         * @param {Player} player
+         * @param {Player} target
+         */
+        stats: (player, target = player) => {
+            const stats = new buttonFormData(player);
+            const kills = scoreTest(target, 'kills');
+            const deaths = scoreTest(target, 'deaths');
+            const killstreak = scoreTest(target, 'killstreak');
+        
+            stats.create(
+                {
+                    title: target === player ? 'Self stats' : `${target.name}'s stats`,
+                    body: [
+                        ['§d§lCombat:'],
+                        [`§bKills §7:§c${kills} §bDeaths §7:§c${deaths} §bKillstreak §7:§c${killstreak}`]
+                    ],
+                    button: [
+                        ['Back']
+                    ]
+                }, (result) => {
+                    if (result.canceled) return;
+                    if (result.selection === 0) gui.player.main(player);
+                }
+            );
+        },
+        
     },
     /**
      * The screen used if the player is staff.
@@ -244,6 +312,10 @@ commandBuild.create(
     {
         name: 'gui',
         description: 'The utility UI for easy usage',
+        usage: [
+            'gui'
+        ],
+        example: [],
         aliases: ['ui'],
         is_staff: false,
         cancel_message: true
@@ -260,8 +332,14 @@ commandBuild.create(
         */
         const player = data.sender;
 
-        if (playerBuild.hasTag(player, 'welcome') === false) return gui.welcome.main(player);
-        if (playerBuild.hasTag(player, configurations.staff_tag) === true || player.isOp() === true) return gui.staff.main(player);
-        else gui.player.main(player);
+        if (playerBuild.hasTag(player, 'welcome') === false) {
+            return gui.welcome.main(player);
+        }
+
+        if ((playerBuild.hasTag(player, configurations.staff_tag) === true && args[0] !== 'nonstaff')) {
+            return gui.staff.main(player);
+        } else {
+            gui.player.main(player);
+        }
     }
 );

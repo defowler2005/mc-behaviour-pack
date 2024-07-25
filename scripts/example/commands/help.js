@@ -3,14 +3,13 @@ import { Database, commandBuild, playerBuild, serverBuild } from "../../library/
 import { configurations } from "../../library/build/configurations.js";
 import { gui } from './staff/gui.js'
 
-
 commandBuild.create(
     {
         name: 'help',
         description: 'Help on how to use a specific command or list all registered commands.',
         aliases: [],
         usage: [
-            'help [ command name ] view_code'
+            'help [ command_name: String ] view_code'
         ],
         example: [
             'help',
@@ -24,20 +23,21 @@ commandBuild.create(
         * @type {Player}
         */
         const player = data.sender;
+        const prefix = configurations.cmd_prefix;
         let text = [];
 
-        if (args.length) { // Check if arguments were used.
+        if (args.length) {
             const commandFound = commandBuild.findCommand(args[0]);
 
             if (commandFound) {
-                text.push(`Command information:`);
-                text.push(`name: ${commandFound.name}`);
-                text.push(`description: ${commandFound.description}`);
-                text.push(`aliases: ${commandFound.aliases}`);
-                text.push(`usage: ${commandFound.usage.join(' | ')}`);
-                text.push(`example: ${commandFound.example.join(' | ')}`);
-                text.push(`is_staff: ${commandFound.is_staff ? 'Yes' : 'No'}`);
-                text.push(`cancel_message: ${commandFound.cancel_message ? 'Yes' : 'No'}`);
+                text.push(`§bCommand information:`);
+                text.push(`§bName: §c${commandFound.name}`);
+                text.push(`§bDescription: §c${commandFound.description}`);
+                text.push(`§bAliases: §c${commandFound.aliases}`);
+                text.push(`§bUsage: §c${commandFound.usage.length ? commandFound.usage.join(`${prefix} | `) : 'none'}`);
+                text.push(`§bExample: §c${commandFound.example.length ? commandFound.example.join(' | ') : 'none'}`);
+                text.push(`§bFor staff only?: §c${commandFound.is_staff ? '§2Yes' : '§cNo'}`);
+                text.push(`§bCancel chat message?: §c${commandFound.cancel_message ? '§2Yes' : '§cNo'}`);
                 if (args[1] === 'view_code') {
                     text.push(`callback[0]: ${commandFound.callback.toString()}\n\n`);
                     text.push(`callbackWM[0]: ${commandFound.callbackWM.toString()}`);
@@ -48,7 +48,7 @@ commandBuild.create(
         } else {
             text.push(`A list of all registered commands:`);
             commandBuild.getAllCommands().forEach((command) => {
-                text.push(command.name);
+                text.push(`§b${command.name}`);
             })
         }; serverBuild.tellSelf(player, `${text.join('\n§r')}`);
     }
