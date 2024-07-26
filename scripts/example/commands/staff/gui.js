@@ -138,8 +138,8 @@ export const gui = {
                         ['Close']
                     ]
                 }, (result) => {
-                    player.addTag('welcome');
-                    if (player.hasTag(configurations.staff_tag) === true) return gui.staff.main(player);
+                    serverBuild.addTag(player, 'welcome');
+                    if (server.hasTag(configurations.staff_tag) === true) return gui.staff.main(player);
                     else gui.player.main(player);
                 }
             );

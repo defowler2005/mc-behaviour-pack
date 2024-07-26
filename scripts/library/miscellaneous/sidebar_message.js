@@ -1,8 +1,9 @@
-import { system, world } from '@minecraft/server';
+import { system } from '@minecraft/server';
+import { serverBuild } from '../Minecraft.js';
 
 system.runInterval(() => {
-    world.getAllPlayers().forEach((player) => {
-        
+    serverBuild.allPlayers.forEach((player) => {
+
         player.onScreenDisplay.setTitle(
             {
                 "rawtext": [
@@ -18,5 +19,5 @@ system.runInterval(() => {
                 fadeOutDuration: 0
             }
         )
-    });
+    })
 }, 10);
