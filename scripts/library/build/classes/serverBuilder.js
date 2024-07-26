@@ -1,4 +1,4 @@
-import { Player, system, world } from "@minecraft/server";
+import { Player, CommandResult, world } from "@minecraft/server";
 import { configurations } from "../configurations";
 
 /**
@@ -12,6 +12,8 @@ class serverBuilder {
         this.allNonStaff = world.getPlayers({ excludeTags: [configurations.staff_tag] });
         /** @type {Player} */
         this.allPlayers = world.getPlayers();
+        const allDimensions = ['overworld', 'the_end', 'nether'];
+        for (const dim of allDimensions) this.dimensions = world.getDimension(dim);
     };
 
     /**
@@ -51,6 +53,50 @@ class serverBuilder {
     tellSelf(player, message) {
         player.sendMessage(message.trim());
     };
+
+    /**
+     * @param {Player} player
+     * @param {String} tag
+     */
+    addTag(player, tag) {
+        player.addTag(tag.trim());
+    };
+
+    /**
+     * @param {Player} player
+     * @param {String} tag
+     */
+    removeTag(player, tag) {
+        player.removeTag(tag.trim());
+    };
+
+    /**
+     * @param {Player} player
+     * @param {String} tag
+     */
+    addRank(player, tag) {
+        player.addTag(tag.trim().replace('rank:'));
+    };
+
+    /**
+     * @param {Player} player
+     * @param {String} tag
+     */
+    removeRank(player, tag) {
+        player.removeTag(tag.trim().replace('rank:'));
+    }
+
+    /**
+     * Execute an array of commands at once.
+     * @param {Array<String>} cmds
+     * @returns {Promise<CommandResult>}
+     */
+    executeCommands(cmds) {
+        let commandE;
+        for (const cmd of cmds) {
+            commandE = this.dimensions.runCommandAsync(cmd);
+        }; return commandE;
+    }
 };
 
 /**

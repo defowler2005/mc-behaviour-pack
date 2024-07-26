@@ -3,6 +3,7 @@ import { commandBuild, playerBuild, serverBuild, Database, inputFormData, button
 import { configurations } from '../../../library/build/configurations.js';
 import { scoreTest, setScore } from '../../../library/utils/score_system.js';
 import { randomNumber } from '../../../library/utils/randomNumber.js';
+import { queryFormData } from '../../../library/build/classes/queryFormData.js';
 
 /** The default basic toggle values for the GUI. */
 export const basic_toggles = ['§4OFF', '§2ON'];
@@ -203,8 +204,7 @@ export const gui = {
                     ]
                 }, (result) => {
                     if (result.canceled) return;
-                    const target = allPlayers.find((plr) => plr.name === allPlayers[result.formValues[0]].name);
-                    console.warn(target.name);
+                    const target = allPlayers.find((plr) => allPlayers[result.formValues[0]].name === plr.name);
                     gui.player.stats(player, target);
                 }
             );
@@ -219,8 +219,8 @@ export const gui = {
             const deaths = scoreTest(target, 'deaths');
             const killstreak = scoreTest(target, 'killstreak');
             const currentTpaChannel = scoreTest(player, 'tpa');
-            const recipient = world.getPlayers().filter((plr) => scoreTest(plr, 'tpa') === scoreTest(player, 'tpa') && player.name !== plr.name);
-
+            const recipient = world.getPlayers().filter((plr) => scoreTest(plr, 'tpa') === currentTpaChannel && player.name !== plr.name)[0];
+            console.warn(currentTpaChannel);
             stats.create(
                 {
                     title: target.name === player.name ? 'Self stats' : `${target.name}'s stats`,
@@ -230,7 +230,7 @@ export const gui = {
                         ['\n'],
                         [`§dTPA:`],
                         [`§bCurrent TPA channel: §c${currentTpaChannel ? currentTpaChannel : 'No requests.'}`],
-                        [`§bCurrent TPA recipient: §c${recipient.name ? recipient.name : 'No requests.'}`]
+                        [`§bCurrent TPA recipient: §c${recipient ? recipient.name : 'No requests.'}`]
                     ],
                     button: [
                         ['Back']
@@ -251,35 +251,78 @@ export const gui = {
                         ['Select an option']
                     ],
                     button: [
-                        ['Send a TPA request']
+                        ['Send a TPA request'],
+                        ['Manage a request']
                     ]
                 }, (result) => {
                     if (result.canceled) return;
                     if (result.selection === 0) gui.player.tpaRequest(player);
+                    if (result.selection === 1) gui.player.manageRequest(player);
                 }
             );
         },
+        /**
+         * @param {Player} player
+         */
         tpaRequest: (player) => {
             const tpaRequest = new inputFormData(player);
-            const allPlayers = world.getAllPlayers();
+            const allPlayers = world.getPlayers().filter((plr) => plr.name !== player.name);
 
             tpaRequest.create(
                 {
                     title: 'Select a player',
                     dropdown: [
-                        ['Players', allPlayers.map((plr) => plr.name), 0]
+                        ['Players', allPlayers.length > 0 ? allPlayers.map((plr) => plr.name) : ['§8No players§r'], 0]
                     ]
                 }, (result) => {
                     if (result.canceled) return;
-                    const target = allPlayers.find((plr) => plr.name === allPlayers[result.formValues[0]].name);
-                    const randomNumberIndex = randomNumber(100, 9999999);
-                    setScore(player, 'tpa', randomNumberIndex);
-                    setScore(target, 'tpa', randomNumberIndex);
-                    target.sendMessage(`Player ${player.name} has sent a TPA request to you.`);
-                    player.sendMessage(`Successfully send a TPA request to ${target.name}.`);
+                    const target = allPlayers[result.formValues[0]];
+
+                    if (target) {
+                        const randomNumberIndex = randomNumber(100, 9999999);
+                        setScore(player, 'tpa', randomNumberIndex);
+                        setScore(target, 'tpa', randomNumberIndex);
+                        serverBuild.tellSelf(target, `Player ${player.name} has sent a TPA request to you.`);
+                        serverBuild.tellSelf(player, `Successfully sent a TPA request to ${target.name}.`);
+                    } else {
+                        // serverBuild.tellSelf(player, '§4No other players in the world.');
+                        return;
+                    }
                 }
             );
-        }
+        },
+        /**
+         * @param {Player} player
+         */
+        manageRequest: (player) => {
+            const manageRequest = new queryFormData(player);
+
+            manageRequest.create(
+                {
+                    title: 'Request management',
+                    body: [
+                        ['Do you wish to accept this request?'],
+                        ['Otherwise, if no, cancel and delete this request.']
+                    ],
+                    button0: ['§4No'],
+                    button1: ['§2Yes']
+                }, (result) => {
+                    if (result.canceled) return;
+                    const currentTpaChannel = scoreTest(player, 'tpa');
+                    const recipient = world.getPlayers().filter((plr) => scoreTest(plr, 'tpa') === currentTpaChannel && player.name !== plr.name)[0];
+
+                    if (result.selection === 1) {
+                        serverBuild.tellSelf(recipient, `Your TPA request has been accepted by ${player.name}.`);
+                        serverBuild.tellSelf(player, `You have accepted the TPA request from ${recipient.name}.`);
+                    } else if (result.selection === 0) {
+                        setScore(player, 'tpa', 0);
+                        setScore(recipient, 'tpa', 0);
+                        serverBuild.tellSelf(recipient, `Your TPA request has been declined by ${player.name}.`);
+                        serverBuild.tellSelf(player, `You have declined the TPA request from ${recipient.name}.`);
+                    }
+                }
+            )
+        },
     },
     /**
      * The screen used if the player is staff.
@@ -384,14 +427,18 @@ commandBuild.create(
         */
         const player = data.sender;
 
-        if (playerBuild.hasTag(player, 'welcome') === false) {
-            return gui.welcome.main(player);
-        }
+        try {
+            if (playerBuild.hasTag(player, 'welcome') === false) {
+                return gui.welcome.main(player);
+            }
 
-        if (playerBuild.hasTag(player, configurations.staff_tag) && player.isOp() && args[0] !== 'nonstaff') {
-            return gui.staff.main(player);
-        } else {
-            gui.player.main(player);
+            if (playerBuild.hasTag(player, configurations.staff_tag) && player.isOp() && args[0] !== 'nonstaff') {
+                return gui.staff.main(player);
+            } else {
+                gui.player.main(player);
+            }
+        } catch (error) {
+            console.warn(`An error occured while running gui: ${error}\n${error.stack}`);
         }
     }
 );
