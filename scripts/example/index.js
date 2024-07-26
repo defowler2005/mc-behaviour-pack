@@ -1,4 +1,5 @@
 import './commands/staff/gui.js';
+import './commands/staff/ranks.js';
 import './commands/other/blues-fate.js';
 import './commands/help.js';
 import '../library/Minecraft.js';
