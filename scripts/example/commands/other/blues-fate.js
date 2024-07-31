@@ -9,10 +9,12 @@ commandBuild.create(
         example: [
             'bluesfate 0',
             'bluesfate 1',
-            'bluesfate 2'
+            'bluesfate 2',
+            'bluesfate 3'
         ],
+        is_staff: false,
         usage: [
-            'bluesfate [ Option: Number ]'
+            'bluesfate [ options ]'
         ]
     },
     (data, args) => {

@@ -1,13 +1,13 @@
-import { world, system, Player } from '@minecraft/server';
-import { configurations } from './build/configurations.js'
-import { waitMove } from './utils/wait_move.js';
-import { Database } from './build/classes/databaseBuilder.js';
-import { buttonFormData } from './build/classes/buttonFormData.js';
-import { inputFormData } from './build/classes/inputFormData.js';
-import { commandBuild } from './build/classes/commandBuilder.js';
-import { serverBuild } from './build/classes/serverBuilder.js';
-import { playerBuild } from './build/classes/playerBuilder.js';
+import { system, world } from '@minecraft/server';
 import { modules } from '../example/commands/staff/gui.js';
+import { buttonFormData } from './build/classes/buttonFormData.js';
+import { commandBuild } from './build/classes/commandBuilder.js';
+import { Database } from './build/classes/databaseBuilder.js';
+import { inputFormData } from './build/classes/inputFormData.js';
+import { playerBuild } from './build/classes/playerBuilder.js';
+import { serverBuild } from './build/classes/serverBuilder.js';
+import { configurations } from './build/configurations.js';
+import { waitMove } from './utils/wait_move.js';
 
 world.beforeEvents.chatSend.subscribe((data) => {
     try {
@@ -27,9 +27,10 @@ world.beforeEvents.chatSend.subscribe((data) => {
         if (Database.get(modules.staff[0].module_id) !== 1 && !playerBuild.hasTag(sender, configurations.staff_tag) && !sender.isOp()) return sender.sendMessage('§cPlayer commands are disabled.');
 
         system.run(() => {
+            command.callback(data, args);
             waitMove(sender, { x, y, z }, () => {
                 command.callbackWM(data, args);
-            }); command.callback(data, args);
+            });
         });
     } catch (error) {
         console.warn(`An error occurred while running Minecraft.js main command center: ${error}\n${error.stack}`);
@@ -37,10 +38,5 @@ world.beforeEvents.chatSend.subscribe((data) => {
 });
 
 export {
-    commandBuild,
-    buttonFormData,
-    inputFormData,
-    serverBuild,
-    Database,
-    playerBuild
+    buttonFormData, commandBuild, Database, inputFormData, playerBuild, serverBuild
 };

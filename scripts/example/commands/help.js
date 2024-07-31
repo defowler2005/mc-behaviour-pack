@@ -34,7 +34,7 @@ commandBuild.create(
                 text.push(`§bName: §c${commandFound.name}`);
                 text.push(`§bDescription: §c${commandFound.description}`);
                 text.push(`§bAliases: §c${commandFound.aliases}`);
-                text.push(`§bUsage: §c${commandFound.usage.length ? commandFound.usage.join(`${prefix} | `) : '§rnone'}`);
+                text.push(`§bUsage: §c${commandFound.usage.length ? commandFound.usage.join(` | `) : '§rnone'}`);
                 text.push(`§bExample: §c${commandFound.example.length ? commandFound.example.join(' | ') : '§rnone'}`);
                 text.push(`§bFor staff only?: §c${commandFound.is_staff ? '§2Yes' : '§cNo'}`);
                 text.push(`§bCancel chat message?: §c${commandFound.cancel_message ? '§2Yes' : '§cNo'}`);
@@ -46,7 +46,7 @@ commandBuild.create(
                 text.push(`§cCommand §f${args[0]}§c not found.`);
             }
         } else {
-            text.push(`§pA list of all registered commands: \n§cCustom command prefix§b${prefix}`);
+            text.push(`§pA list of all registered commands: \n§cCustom command prefix: §b${prefix}`);
             commandBuild.getAllCommands().forEach((command) => {
                 text.push(`§b${command.name}`);
             })

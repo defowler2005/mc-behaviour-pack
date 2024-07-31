@@ -24,17 +24,19 @@ class commandBuilder {
      * @param {Function} callbackWM - The callback function for when the command is called with moderation.
      */
     create(info, callback, callbackWM) {
-        const command = {
-            name: info.name,
-            description: info.description,
-            aliases: info.aliases || [],
-            usage: info.usage || [],
-            example: info.example || [],
-            is_staff: info.is_staff || false,
-            cancel_message: info.cancel_message || true,
-            callback,
-            callbackWM: callbackWM || (() => { })
-        }; this.commands.push(command);
+        this.commands.push(
+            {
+                name: info.name,
+                description: info.description,
+                aliases: info.aliases || [],
+                usage: info.usage || [],
+                example: info.example || [],
+                is_staff: info.is_staff || false,
+                cancel_message: info.cancel_message || true,
+                callback: callback || (() => { console.warn('Callback[0] is successfully executed!') }),
+                callbackWM: callbackWM || (() => { })
+            }
+        )
     }
 
     /**

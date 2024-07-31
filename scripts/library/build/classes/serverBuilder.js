@@ -11,7 +11,7 @@ class serverBuilder {
         /** @type {Player} */
         this.allNonStaff = world.getPlayers({ excludeTags: [configurations.staff_tag] });
         /** @type {Player} */
-        this.allPlayers = world.getPlayers();
+        this.allPlayers = world.getAllPlayers();
         const allDimensions = ['overworld', 'the_end', 'nether'];
         for (const dim of allDimensions) this.dimensions = world.getDimension(dim);
     };
@@ -22,7 +22,7 @@ class serverBuilder {
      */
     tellServer(message) {
         world.getAllPlayers().forEach((player) => {
-            player.sendMessage(`${message.trim()}`);
+            player.sendMessage(`${message?.trim()}`);
         })
     };
 
@@ -32,7 +32,7 @@ class serverBuilder {
      */
     tellStaff(message) {
         this.allNonStaff.forEach((player) => {
-            player.sendMessage(`${message.trim()}`);
+            player.sendMessage(`${message?.trim()}`);
         })
     };
 
@@ -42,7 +42,7 @@ class serverBuilder {
      */
     tellNonStaff(message) {
         this.allStaff.forEach((player) => {
-            player.sendMessage(`${message.trim()}`);
+            player.sendMessage(`${message?.trim()}`);
         })
     };
 
@@ -51,7 +51,7 @@ class serverBuilder {
      * @param {String} message
      */
     tellSelf(player, message) {
-        player.sendMessage(message.trim());
+        player.sendMessage(message?.trim());
     };
 
     /**
@@ -59,7 +59,7 @@ class serverBuilder {
      * @param {String} tag
      */
     addTag(player, tag) {
-        player.addTag(tag.trim());
+        player.addTag(tag?.trim());
     };
 
     /**
@@ -67,7 +67,7 @@ class serverBuilder {
      * @param {String} tag
      */
     removeTag(player, tag) {
-        player.removeTag(tag.trim());
+        player.removeTag(tag?.trim());
     };
 
     /**
@@ -75,7 +75,7 @@ class serverBuilder {
      * @param {String} tag
      */
     addRank(player, tag) {
-        player.addTag(tag.trim().replace('rank:'));
+        player.addTag(tag.replace('rank:')?.trim());
     };
 
     /**
@@ -83,7 +83,7 @@ class serverBuilder {
      * @param {String} tag
      */
     removeRank(player, tag) {
-        player.removeTag(tag.trim().replace('rank:'));
+        player.removeTag(tag.replace('rank:')?.trim());
     }
 
     /**

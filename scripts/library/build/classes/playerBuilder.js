@@ -13,7 +13,7 @@ class playerBuilder {
      * @returns {Boolean}
      */
     hasTag(player, tag) {
-        return player.hasTag(tag.trim());
+        return player.hasTag(tag?.trim());
     };
 
     /**

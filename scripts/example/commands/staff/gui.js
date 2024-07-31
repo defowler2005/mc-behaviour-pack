@@ -1,15 +1,15 @@
-import { world, Player, system } from '@minecraft/server';
-import { commandBuild, playerBuild, serverBuild, Database, inputFormData, buttonFormData } from '../../../library/Minecraft.js';
-import { configurations } from '../../../library/build/configurations.js';
-import { scoreTest, setScore } from '../../../library/utils/score_system.js';
-import { randomNumber } from '../../../library/utils/randomNumber.js';
+import { Player, system, world } from '@minecraft/server';
+import { buttonFormData, commandBuild, Database, inputFormData, playerBuild, serverBuild } from '../../../library/Minecraft.js';
 import { queryFormData } from '../../../library/build/classes/queryFormData.js';
+import { configurations } from '../../../library/build/configurations.js';
+import { randomNumber } from '../../../library/utils/randomNumber.js';
+import { scoreTest, setScore } from '../../../library/utils/score_system.js';
 
-/** The default basic toggle values for the GUI. */
+/** - The default basic toggle values for the GUI. */
 export const basic_toggles = ['§4OFF', '§2ON'];
 
 /**
- * @typedef {Object} modules - The GUI modules object, Note 'module' prefix is not required for the moduleId here.
+ * @typedef {Object} modules - The GUI modules object, Note the 'module:' prefix is not required for the moduleId here.
  * @property {string} displayName - The display name of the module.
  * @property {string} moduleId - The ID to be used in the Database.
  * @property {string[]} toggles - The array of toggle options.
@@ -19,7 +19,7 @@ export const modules = {
     /**
      * An array of {@link modules} objects representing GUI modules for staff users.
      */
-    staff: [
+    staff: [ // Staff members modules.
         {
             disp_name: 'Player commands',
             module_id: 'apctoggle',
@@ -35,26 +35,26 @@ export const modules = {
         {
             disp_name: 'Display sidebar',
             module_id: 'dsbtoggle',
-            toggles: ['§4OFF', '§2Self stats', '§3Server stats', '§6Server logo only'],
+            toggles: [basic_toggles[0], '§2Self stats', '§3Server stats'],
             index_id: 2
         }
     ],
     /**
-    *  An array of {@link modules} objects for GUI modules for non-staff players.
-    */
-    player: [
+     *  An array of {@link modules} objects for GUI modules for non-staff players.
+     */
+    player: [ // Non staff modules.
         {
             disp_name: 'Display sidebar',
             module_id: 'dsbtoggle',
-            toggles: ['§4OFF', '§2Self stats', '§3Server stats', '§6Server logo only'],
+            toggles: [basic_toggles[0], '§2Self stats', '§3Server stats'],
             index_id: 0
         }
     ],
-    blues: [
+    blues: [ // Modules designed for Blues 8s bit.
         {
             disp_name: 'Anti-Blues',
             module_id: 'abtoggle',
-            toggles: ['§4OFF', '§2All combined', '§3Clear items', '§6Prevent placing blocks'],
+            toggles: [basic_toggles[0], '§2All combined', '§3Clear items', '§6Prevent placing/breaking blocks'],
             index_id: 0
         }
     ]
@@ -67,30 +67,37 @@ export const modules = {
  * @param {String} module_type - Indicates wether a module was designed for staff or non staff, 
  * @param {Number} new_value - The new value to set for the module.
  * @param {Number} old_value - The old value of the module before the update.
- * @type {(player: Player, module: typeof modules.staff[number], new_value: number) => Function}
+ * @type {(module: typeof modules.staff[Number], new_value: Number, player: Player, nonstaff_player: Player) => Function}
  * @returns {Number} - 0 represents no issues arose, 1 represents one or more issues arose.
  */
-const setModule = (player, module, new_value) => {
+const setModule = (player, module, new_value, nonstaff_player = undefined) => {
     try {
-        const old_value = Number(Database.get(`module:${module.module_id}`));
+        if (!nonstaff_player) {
+            const old_value = Number(Database.get(`module:${module.module_id}`));
 
-        if (old_value === new_value) return;
-        serverBuild.tellServer(`§bPlayer §c${player.name} §bhas set the module §g${module.disp_name}§b to §r${module.toggles[new_value]}`);
-        Database.set(`module:${module.module_id}`, new_value);
+            if (old_value === new_value) return;
+            serverBuild.tellServer(`§bPlayer §c${player.name} §bhas set the module §g${module.disp_name}§b to §r${module.toggles[new_value]}`);
+            Database.set(`module:${module.module_id}`, new_value);
+        } else {
+            const player_old_value = Number(Database.get(`module:${module.module_id}`, nonstaff_player));
+
+            if (player_old_value === new_value) return;
+            serverBuild.tellSelf(nonstaff_player, `§bSuccessfully set the module §g${module.disp_name}§b to §r${module.toggles[new_value]}`);
+            Database.set(`module:${module.module_id}`, new_value, nonstaff_player);
+        }
     } catch (error) {
-        console.warn(`An error occurred while setting modules: ${error}\n${error.stack}`);
+        console.warn(`An error occurred while setting modules ${nonstaff_player ? `for ${nonstaff_player.name}` : ''}: ${error}\n${error.stack}`);
         return 1;
     }
 };
 
-
 /**
- * The full GUI scheme.
+ * - The full GUI scheme, supported for staff and nonstaff.
  */
 export const gui = {
     blues: {
         decide_fate: (player) => {
-            const decideForm = new inputFormData();
+            const decideForm = new inputFormData(player);
             const abtoggle = Number(Database.get(`module:${modules.blues[0].module_id}`));
             const isBlues = player.name === 'Blues 8s bit';
 
@@ -101,20 +108,10 @@ export const gui = {
                         ['Anti-Blues', modules.blues[0].toggles, !!abtoggle]
                     ]
                 },
-                (formResults) => {
-                    const result = formResults.formValues[0];
-                    if (result.canceled) {
-                        serverBuild.tellSelf(player, 'Anti-Blues > Alright your fate has been auto selected... §2All combined');
-                        Database.set(`module:${modules.blues[0].module_id}`, result);
-                        return;
-                    }
-                    if (result === 0) {
-                        serverBuild.tellSelf(player.name, 'Anti-Blues > Alright your fate has been auto selected because §4OFF §ris not a valid option§r... §2All combined');
-                        Database.set(`module:${modules.blues[0].module_id}`, 1);
-                        setModule(player, modules.blues[0], 1);
-                    }
-                    serverBuild.tellSelf(player, `Anti-Blues > Alright your fate has been set to ${modules.blues[0].toggles[result]}`);
-                    Database.set(`module:${modules.blues[0].module_id}`, result);
+                (result) => {
+                    if (result.canceled) return;
+
+                    
                 }
             )
         }
@@ -162,15 +159,49 @@ export const gui = {
                         ['Non staff player utility UI.']
                     ],
                     button: [
+                        ['Modules'],
                         ['Stats'],
                         ['TPA options']
                     ]
                 }, (result) => {
                     if (result.canceled) return;
-                    if (result.selection === 0) gui.player.statsSelection(player);
-                    if (result.selection === 1) gui.player.mainTpaMenu(player);
+                    if (result.selection === 0) gui.player.modules(player);
+                    if (result.selection === 1) gui.player.statsSelection(player);
+                    if (result.selection === 2) gui.player.mainTpaMenu(player);
                 }
             );
+        },
+        modules: (player) => {
+            try {
+                const utility_modules = new inputFormData(player);
+
+                let allPlayerModuleToggles = [];
+                let allPlayerModuleDropdowns = [];
+
+                for (let module of modules.player) {
+                    const current_value = Number(Database.get(`module:${module.module_id}`, player));
+                    if (module.toggles.length === 2) {
+                        allPlayerModuleToggles.push([module.disp_name, !!current_value]);
+                    } else {
+                        allPlayerModuleDropdowns.push([module.disp_name, module.toggles, current_value]);
+                    }
+                };
+
+                utility_modules.create(
+                    {
+                        title: 'Toggle utilities.',
+                        dropdown: allPlayerModuleDropdowns,
+                        toggle: allPlayerModuleToggles
+                    }, (result) => {
+                        if (result.canceled) return;
+                        result.formValues?.forEach((a, b) => {
+                            setModule(player, modules.player[b], Number(a), player);
+                        })
+                    }
+                );
+            } catch (error) {
+                console.error(error)
+            };
         },
         statsSelection: (player) => {
             const statsSelection = new buttonFormData(player);
@@ -359,11 +390,13 @@ export const gui = {
                         ['Staff utility UI.']
                     ],
                     button: [
-                        ['Utilities']
+                        ['Utilities'],
+                        ['Blues 8s bit options']
                     ]
                 }, (result) => {
                     if (result.canceled) return;
                     if (result.selection === 0) gui.staff.utility_modules(player);
+                    if (result.selection === 1) gui.blues.decide_fate(player);
                 }
             );
         },
@@ -393,8 +426,6 @@ export const gui = {
                         if (result.canceled) return;
                         result.formValues?.forEach((a, b) => {
                             setModule(player, modules.staff[b], Number(a));
-                            console.warn(modules.staff[b].disp_name)
-
                         })
                     }
                 );
