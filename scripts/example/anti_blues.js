@@ -15,7 +15,6 @@ system.runInterval(() => {
         if (abtoggle !== 1 || abtoggle !== 2 && blues.nameTag !== bluesName) return;
         const inventoryItems = playerBuild.getInventory(blues);
         inventoryItems.forEach((itemObj) => {
-            console.warn(itemObj.item.typeId);
             if (knownItems.includes(itemObj.item.typeId)) {
                 const pumpkin = new ItemStack('minecraft:carved_pumpkin', 1);
                 blues.getComponent('minecraft:equippable').setEquipment(EquipmentSlot.Head, pumpkin);

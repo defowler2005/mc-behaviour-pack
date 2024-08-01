@@ -109,7 +109,6 @@ export const gui = {
                     ]
                 },
                 (result) => {
-                    if (result.canceled) return;
 
 
                 }
@@ -164,7 +163,6 @@ export const gui = {
                         ['TPA options']
                     ]
                 }, (result) => {
-                    if (result.canceled) return;
                     if (result.selection === 0) gui.player.modules(player);
                     if (result.selection === 1) gui.player.statsSelection(player);
                     if (result.selection === 2) gui.player.mainTpaMenu(player);
@@ -193,8 +191,7 @@ export const gui = {
                         dropdown: allPlayerModuleDropdowns,
                         toggle: allPlayerModuleToggles
                     }, (result) => {
-                        if (result.canceled) return;
-                        result.formValues?.forEach((a, b) => {
+                            result.formValues?.forEach((a, b) => {
                             setModule(player, modules.player[b], Number(a), player);
                         })
                     }
@@ -217,7 +214,6 @@ export const gui = {
                         ['Other stats']
                     ]
                 }, (result) => {
-                    if (result.canceled) return;
                     if (result.selection === 0) gui.player.stats(player);
                     if (result.selection === 1) gui.player.otherStatsSelection(player);
                 }
@@ -234,7 +230,6 @@ export const gui = {
                         ['Players', allPlayers.map((plr) => plr.name), 0]
                     ]
                 }, (result) => {
-                    if (result.canceled) return;
                     const target = allPlayers.find((plr) => allPlayers[result.formValues[0]].name === plr.name);
                     gui.player.stats(player, target);
                 }
@@ -267,7 +262,6 @@ export const gui = {
                         ['Back']
                     ]
                 }, (result) => {
-                    if (result.canceled) return;
                     if (result.selection === 0) gui.player.main(player);
                 }
             );
@@ -286,7 +280,6 @@ export const gui = {
                         ['Manage a request']
                     ]
                 }, (result) => {
-                    if (result.canceled) return;
                     if (result.selection === 0) gui.player.tpaRequest(player);
                     if (result.selection === 1) gui.player.manageRequest(player);
                 }
@@ -303,10 +296,9 @@ export const gui = {
                 {
                     title: 'Select a player',
                     dropdown: [
-                        ['Players', allPlayers.length > 0 ? allPlayers.map((plr) => plr.name) : ['§8No players§r'], 0]
+                        ['Players', allPlayers.length > 1 ? allPlayers.map((plr) => plr.name) : ['§8No players§r'], 0]
                     ]
                 }, (result) => {
-                    if (result.canceled) return;
                     const target = allPlayers[result.formValues[0]];
 
                     if (target) {
@@ -333,12 +325,11 @@ export const gui = {
                     title: 'Request management',
                     body: [
                         ['Do you wish to accept this request?'],
-                        ['Otherwise, if no, cancel and delete this request.']
+                        ['If no, cancel and delete this request.']
                     ],
                     button0: ['§4No'],
                     button1: ['§2Yes']
                 }, (result) => {
-                    if (result.canceled) return;
                     const currentTpaChannel = scoreTest(player, 'tpa');
                     const recipient = world.getPlayers().filter((plr) => scoreTest(plr, 'tpa') === currentTpaChannel && player.name !== plr.name)[0];
 
@@ -374,7 +365,6 @@ export const gui = {
                         ['Modules']
                     ]
                 }, (result) => {
-                    if (result.canceled) return;
                     if (result.selection === 0) gui.staff.modules(player);
                 }
             );
@@ -394,7 +384,6 @@ export const gui = {
                         ['Blues 8s bit options']
                     ]
                 }, (result) => {
-                    if (result.canceled) return;
                     if (result.selection === 0) gui.staff.utility_modules(player);
                     if (result.selection === 1) gui.blues.decide_fate(player);
                 }
@@ -423,8 +412,7 @@ export const gui = {
                         dropdown: allStaffModuleDropdowns,
                         toggle: allStaffModuleToggles
                     }, (result) => {
-                        if (result.canceled) return;
-                        result.formValues?.forEach((a, b) => {
+                            result.formValues?.forEach((a, b) => {
                             setModule(player, modules.staff[b], Number(a));
                         })
                     }
