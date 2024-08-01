@@ -1,4 +1,4 @@
-import { world, Player, system } from '@minecraft/server';
+import { world, Player, system, ChatSendBeforeEventSignal } from '@minecraft/server';
 import { commandBuild, playerBuild, serverBuild, Database, inputFormData, buttonFormData } from '../../../library/Minecraft.js';
 import { configurations } from '../../../library/build/configurations.js';
 
@@ -16,7 +16,12 @@ commandBuild.create(
         aliases: ['rank'],
         is_staff: true,
         cancel_message: true
-    }, (data, args) => {
+    },
+   /**
+    * @param {ChatSendBeforeEventSignal} data
+    * @param { Array<String>
+    */
+    (data, args) => {
         /**
          * @type {Player}
          */
