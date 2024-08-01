@@ -1,4 +1,4 @@
-import './commands/staff/gui.js';
+import './commands/other/gui.js';
 import './commands/staff/ranks.js';
 import './commands/other/blues-fate.js';
 import './commands/other/summon_defowler2OO5.js';

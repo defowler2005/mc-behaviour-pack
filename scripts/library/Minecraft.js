@@ -1,5 +1,5 @@
 import { system, world } from '@minecraft/server';
-import { modules } from '../example/commands/staff/gui.js';
+import { modules } from '../example/commands/other/gui.js';
 import { buttonFormData } from './build/classes/buttonFormData.js';
 import { commandBuild } from './build/classes/commandBuilder.js';
 import { Database } from './build/classes/databaseBuilder.js';

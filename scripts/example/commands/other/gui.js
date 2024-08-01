@@ -4,16 +4,17 @@ import { queryFormData } from '../../../library/build/classes/queryFormData.js';
 import { configurations } from '../../../library/build/configurations.js';
 import { randomNumber } from '../../../library/utils/randomNumber.js';
 import { scoreTest, setScore } from '../../../library/utils/score_system.js';
+import { ActionFormResponse, MessageFormResponse, ModalFormResponse } from '@minecraft/server-ui';
 
 /** - The default basic toggle values for the GUI. */
 export const basic_toggles = ['§4OFF', '§2ON'];
 
 /**
  * @typedef {Object} modules - The GUI modules object, Note the 'module:' prefix is not required for the moduleId here.
- * @property {string} displayName - The display name of the module.
- * @property {string} moduleId - The ID to be used in the Database.
- * @property {string[]} toggles - The array of toggle options.
- * @property {number} indexId - The index ID in order.
+ * @property {String} displayName - The display name of the module.
+ * @property {String} moduleId - The ID to be used in the Database.
+ * @property {String[]} toggles - The array of toggle options.
+ * @property {Number} indexId - The index ID in order.
  */
 export const modules = {
     /**
@@ -61,32 +62,32 @@ export const modules = {
 };
 
 /**
- * The function to set the modules within the world.
+ * Sets the module value for a player or nonstaff player.
  * @param {Player} player - The player object.
- * @param {typeof modules.player[number]} module - The module object.
- * @param {String} module_type - Indicates wether a module was designed for staff or non staff, 
- * @param {Number} new_value - The new value to set for the module.
- * @param {Number} old_value - The old value of the module before the update.
- * @type {(module: typeof modules.staff[Number], new_value: Number, player: Player, nonstaff_player: Player) => Function}
- * @returns {Number} - 0 represents no issues arose, 1 represents one or more issues arose.
+ * @param {typeof modules.staff[Number]} module - The module object.
+ * @param {Number} newValue - The new value to set for the module.
+ * @param {Player} [nonstaffPlayer] - Optional nonstaff player object.
+ * @returns {Number} - 0 if successful, 1 if an error occurred.
  */
-const setModule = (player, module, new_value, nonstaff_player = undefined) => {
+const setModule = (player, module, newValue, nonstaffPlayer = undefined) => {
     try {
-        if (!nonstaff_player) {
-            const old_value = Number(Database.get(`module:${module.module_id}`));
+        const moduleKey = `module:${module.module_id}`;
+        const oldValue = nonstaffPlayer ? Number(Database.get(moduleKey, nonstaffPlayer)) : Number(Database.get(moduleKey));
 
-            if (old_value === new_value) return;
-            serverBuild.tellServer(`§bPlayer §c${player.name} §bhas set the module §g${module.disp_name}§b to §r${module.toggles[new_value]}`);
-            Database.set(`module:${module.module_id}`, new_value);
+        if (oldValue === newValue) return 0;
+
+        const message = `§b${nonstaffPlayer ? 'Successfully set the module' : `Player §c${player.name} §bhas set the module`} §g${module.disp_name}§b to §r${module.toggles[newValue]}`;
+
+        if (nonstaffPlayer) {
+            serverBuild.tellSelf(nonstaffPlayer, message);
+            Database.set(moduleKey, newValue, nonstaffPlayer);
         } else {
-            const player_old_value = Number(Database.get(`module:${module.module_id}`, nonstaff_player));
-
-            if (player_old_value === new_value) return;
-            serverBuild.tellSelf(nonstaff_player, `§bSuccessfully set the module §g${module.disp_name}§b to §r${module.toggles[new_value]}`);
-            Database.set(`module:${module.module_id}`, new_value, nonstaff_player);
+            serverBuild.tellServer(message);
+            Database.set(moduleKey, newValue);
         }
+        return 0;
     } catch (error) {
-        console.warn(`An error occurred while setting modules ${nonstaff_player ? `for ${nonstaff_player.name}` : ''}: ${error}\n${error.stack}`);
+        console.warn(`An error occurred while setting modules ${nonstaffPlayer ? `for ${nonstaffPlayer.name}` : ''}: ${error}\n${error.stack}`);
         return 1;
     }
 };
@@ -96,6 +97,10 @@ const setModule = (player, module, new_value, nonstaff_player = undefined) => {
  */
 export const gui = {
     blues: {
+        /**
+         * A menu for selecting Blues 8s bit's fate.
+         * @param {Player} player
+         */
         decide_fate: (player) => {
             const decideForm = new inputFormData(player);
             const abtoggle = Number(Database.get(`module:${modules.blues[0].module_id}`));
@@ -108,10 +113,7 @@ export const gui = {
                         ['Anti-Blues', modules.blues[0].toggles, !!abtoggle]
                     ]
                 },
-                (result) => {
-
-
-                }
+                (result) => { }
             )
         }
     },
@@ -169,6 +171,10 @@ export const gui = {
                 }
             );
         },
+        /**
+         * A menu for nonstaff, modifying self modules.
+         * @param {Player} player 
+         */
         modules: (player) => {
             try {
                 const utility_modules = new inputFormData(player);
@@ -191,7 +197,7 @@ export const gui = {
                         dropdown: allPlayerModuleDropdowns,
                         toggle: allPlayerModuleToggles
                     }, (result) => {
-                            result.formValues?.forEach((a, b) => {
+                        result.formValues?.forEach((a, b) => {
                             setModule(player, modules.player[b], Number(a), player);
                         })
                     }
@@ -200,6 +206,11 @@ export const gui = {
                 console.error(error)
             };
         },
+
+        /**
+         * A menu for selecting your stats or another player's stats.
+         * @param {Player} player 
+         */
         statsSelection: (player) => {
             const statsSelection = new buttonFormData(player);
 
@@ -213,12 +224,18 @@ export const gui = {
                         ['Self stats'],
                         ['Other stats']
                     ]
-                }, (result) => {
+                },
+                /** @param {ActionFormResponse} result */
+                (result) => {
                     if (result.selection === 0) gui.player.stats(player);
                     if (result.selection === 1) gui.player.otherStatsSelection(player);
                 }
             );
         },
+        /**
+         * A menu for selecting another player to view all there possible stats.
+         * @param {Player} player 
+         */
         otherStatsSelection: (player) => {
             const statsSelection = new inputFormData(player);
             const allPlayers = world.getAllPlayers();
@@ -236,6 +253,7 @@ export const gui = {
             );
         },
         /**
+         * A menu for viewng all possible stats of a player.
          * @param {Player} player
          * @param {Player} target
          */
@@ -261,7 +279,9 @@ export const gui = {
                     button: [
                         ['Back']
                     ]
-                }, (result) => {
+                },
+                /** @param {ActionFormResponse} result */
+                (result) => {
                     if (result.selection === 0) gui.player.main(player);
                 }
             );
@@ -279,7 +299,9 @@ export const gui = {
                         ['Send a TPA request'],
                         ['Manage a request']
                     ]
-                }, (result) => {
+                },
+                /** @param {ActionFormResponse} result */
+                (result) => {
                     if (result.selection === 0) gui.player.tpaRequest(player);
                     if (result.selection === 1) gui.player.manageRequest(player);
                 }
@@ -298,7 +320,9 @@ export const gui = {
                     dropdown: [
                         ['Players', allPlayers.length > 1 ? allPlayers.map((plr) => plr.name) : ['§8No players§r'], 0]
                     ]
-                }, (result) => {
+                },
+                /** @param {ActionFormResponse} result */
+                (result) => {
                     const target = allPlayers[result.formValues[0]];
 
                     if (target) {
@@ -329,7 +353,9 @@ export const gui = {
                     ],
                     button0: ['§4No'],
                     button1: ['§2Yes']
-                }, (result) => {
+                },
+                /** @param {MessageFormResponse} result */
+                (result) => {
                     const currentTpaChannel = scoreTest(player, 'tpa');
                     const recipient = world.getPlayers().filter((plr) => scoreTest(plr, 'tpa') === currentTpaChannel && player.name !== plr.name)[0];
 
@@ -364,7 +390,9 @@ export const gui = {
                     button: [
                         ['Modules']
                     ]
-                }, (result) => {
+                },
+                /** @param {ActionFormResponse} result */
+                (result) => {
                     if (result.selection === 0) gui.staff.modules(player);
                 }
             );
@@ -383,7 +411,9 @@ export const gui = {
                         ['Utilities'],
                         ['Blues 8s bit options']
                     ]
-                }, (result) => {
+                },
+                /** @param {ActionFormResponse} result */
+                (result) => {
                     if (result.selection === 0) gui.staff.utility_modules(player);
                     if (result.selection === 1) gui.blues.decide_fate(player);
                 }
@@ -411,8 +441,10 @@ export const gui = {
                         title: 'Toggle utilities.',
                         dropdown: allStaffModuleDropdowns,
                         toggle: allStaffModuleToggles
-                    }, (result) => {
-                            result.formValues?.forEach((a, b) => {
+                    },
+                    /** @param {ModalFormResponse} result */
+                    (result) => {
+                        result.formValues?.forEach((a, b) => {
                             setModule(player, modules.staff[b], Number(a));
                         })
                     }
@@ -429,7 +461,7 @@ commandBuild.create(
         name: 'gui',
         description: 'The utility UI for easy usage',
         usage: ['gui [ nonstaff ]'],
-        example: ['gui', 'gui'],
+        example: ['gui', 'gui nonstaff'],
         aliases: ['ui'],
         is_staff: false,
         cancel_message: true
@@ -447,15 +479,9 @@ commandBuild.create(
         const player = data.sender;
 
         try {
-            if (playerBuild.hasTag(player, 'welcome') === false) {
-                return gui.welcome.main(player);
-            }
-
-            if (playerBuild.hasTag(player, configurations.staff_tag) && player.isOp() && args[0] !== 'nonstaff') {
-                return gui.staff.main(player);
-            } else {
-                gui.player.main(player);
-            }
+            if (playerBuild.hasTag(player, 'welcome') === false) return gui.welcome.main(player);
+            if (playerBuild.hasTag(player, configurations.staff_tag) && player.isOp() && args[0] !== 'nonstaff') return gui.staff.main(player);
+            else gui.player.main(player);
         } catch (error) {
             console.warn(`An error occured while running gui: ${error}\n${error.stack}`);
         }

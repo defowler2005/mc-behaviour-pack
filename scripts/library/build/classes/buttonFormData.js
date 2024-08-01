@@ -48,7 +48,7 @@ export class buttonFormData {
      * @param {string} info.title - The title of the form.
      * @param {Array<[String]>} info.body - The body text of the form.
      * @param {Array<[String, String]>} info.button - The buttons to add to the form, each represented by a name and an icon.
-     * @param {Function(ActionFormResponse) Void} callback - The callback function to execute when the form is submitted.
+     * @param {Function(ActionFormResponse): Void} callback - The callback function to execute when the form is submitted.
      */
     create(info, callback) {
         try {

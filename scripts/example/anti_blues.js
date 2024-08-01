@@ -1,6 +1,6 @@
 import { EquipmentSlot, ItemStack, system, world } from "@minecraft/server";
 import { Database, playerBuild, serverBuild } from "../library/Minecraft.js";
-import { gui, modules } from "./commands/staff/gui.js";
+import { gui, modules } from "./commands/other/gui.js";
 
 const bluesName = 'defowler2OO5'; // 'Blues 8s bit';
 const knownItems = ['minecraft:redstone_block', 'minecraft:dropper', 'minecraft:dispenser', 'minecraft:carved_pumpkin'];

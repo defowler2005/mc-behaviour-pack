@@ -1,6 +1,6 @@
 import { system } from '@minecraft/server';
 import { Database, serverBuild } from '../Minecraft.js';
-import { modules } from '../../example/commands/staff/gui.js';
+import { modules } from '../../example/commands/other/gui.js';
 
 system.runInterval(() => {
     serverBuild.allPlayers.forEach((player) => {

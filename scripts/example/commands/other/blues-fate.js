@@ -1,6 +1,6 @@
 import { Player, world } from "@minecraft/server";
 import { commandBuild, Database, serverBuild } from "../../../library/Minecraft.js";
-import { modules } from "../staff/gui.js";
+import { modules } from "../other/gui.js";
 
 commandBuild.create(
     {
