@@ -14,7 +14,7 @@ commandBuild.create(
         ],
         is_staff: false,
         usage: [
-            'bluesfate [ options ]'
+            'bluesfate [ 0 | 1 | 2 | 3 ]'
         ]
     },
     (data, args) => {

@@ -23,7 +23,6 @@ world.beforeEvents.chatSend.subscribe((data) => {
         if (!command) return sender.sendMessage({ "rawtext": [{ "text": "§c" }, { "translate": "commands.generic.unknown", "with": [`§f${cmd}§c`] }] });
         if (command.is_staff === true && !playerBuild.hasTag(sender, configurations.staff_tag) && !sender.isOp()) return sender.sendMessage('§cThis command is designed for staff only.');
         if (command.cancel_message === false) data.cancel = false;
-
         if (Database.get(modules.staff[0].module_id) !== 1 && !playerBuild.hasTag(sender, configurations.staff_tag) && !sender.isOp()) return sender.sendMessage('§cPlayer commands are disabled.');
 
         system.run(() => {
@@ -33,10 +32,15 @@ world.beforeEvents.chatSend.subscribe((data) => {
             });
         });
     } catch (error) {
-        console.warn(`An error occurred while running Minecraft.js main command center: ${error}\n${error.stack}`);
+        console.warn(`An error occurred while running Minecraft.js at main command center: ${error}\n${error.stack}`);
     }
 });
 
 export {
-    buttonFormData, commandBuild, Database, inputFormData, playerBuild, serverBuild
+    buttonFormData,
+    commandBuild,
+    Database,
+    inputFormData,
+    playerBuild,
+    serverBuild
 };
