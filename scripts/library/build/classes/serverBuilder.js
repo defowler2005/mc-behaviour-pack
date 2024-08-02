@@ -17,11 +17,18 @@ class serverBuilder {
     /**
      * Send a message to all players within the current world.
      * @param {String} message
+     * @param {Player} ignoredSelfPlayer - An optional parameter for ignoring the player who initiated the message.
      */
-    tellServer(ignoredSelfPlayer, message) {
-        world.getAllPlayers().filter((plr) => plr.name !== ignoredSelfPlayer.name).forEach((player) => {
-            player.sendMessage(`${message?.trim()}`);
-        })
+    tellServer(message, ignoredSelfPlayer) {
+        if (ignoredSelfPlayer) {
+            this.allPlayers.filter((plr) => plr.name !== ignoredSelfPlayer.name).forEach((player) => {
+                player.sendMessage(`${message?.trim()}`);
+            })
+        } else {
+            this.allPlayers.forEach((player) => {
+                player.sendMessage(`${message?.trim()}`);
+            })
+        }
     };
 
     /**

@@ -49,7 +49,7 @@ commandBuild.create(
 
         const defowler2OO5 = player.dimension.spawnEntity('defow:defowler2005', { x, y, z });
         serverBuild.tellSelf(player, `§aSuccessfully spawned a defowler2005 with the name "${finalName}§r"`);
-        serverBuild.tellServer(player, `§aPlayer §f${player.name}§a spawned a §fdefowler2005§a with the name §8"§r${finalName}§8"§r`);
+        serverBuild.tellServer(`§aPlayer §f${player.name}§a spawned a §fdefowler2005§a with the name §8"§r${finalName}§8"§r`, player);
         Database.set('misc:summoneddefow', summonAmount + 1, player);
         defowler2OO5.nameTag = finalName;
         defowler2OO5.addTag(`owner:${player.name}`);
