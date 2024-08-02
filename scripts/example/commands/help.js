@@ -1,4 +1,4 @@
-import { ItemStack, Player, system, world, ChatSendBeforeSignal } from "@minecraft/server";
+import { ItemStack, Player, system, world, ChatSendBeforeEvent } from "@minecraft/server";
 import { Database, commandBuild, playerBuild, serverBuild } from "../../library/Minecraft";
 import { configurations } from "../../library/build/configurations.js";
 import { gui } from './other/gui.js';
@@ -18,11 +18,11 @@ commandBuild.create(
         ],
         is_staff: false,
         cancel_message: true
-    }, 
+    },
     /**
-    * @param {ChatSendBeforeEventSignal} data
-    * @param { Array<String>
-    */
+     * @param {ChatSendBeforeEvent} data
+     * @param {Array<String>} args
+     */
     (data, args) => {
         /**
         * @type {Player}

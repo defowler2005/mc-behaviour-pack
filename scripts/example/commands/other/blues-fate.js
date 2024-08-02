@@ -1,4 +1,4 @@
-import { Player, world } from "@minecraft/server";
+import { ChatSendBeforeEvent, Player, world } from "@minecraft/server";
 import { commandBuild, Database, serverBuild } from "../../../library/Minecraft.js";
 import { modules } from "../other/gui.js";
 
@@ -17,10 +17,11 @@ commandBuild.create(
             'bluesfate [ 0 | 1 | 2 | 3 ]'
         ]
     },
+    /**
+     * @param {ChatSendBeforeEvent} data
+     * @param {Array<String>} args
+     */
     (data, args) => {
-        /**
-         * @type {Player}
-         */
         const player = data.sender;
         const options = [
             '0',

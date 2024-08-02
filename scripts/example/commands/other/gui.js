@@ -1,4 +1,4 @@
-import { Player, system, world } from '@minecraft/server';
+import { ChatSendBeforeEvent, Player, system, world } from '@minecraft/server';
 import { buttonFormData, commandBuild, Database, inputFormData, playerBuild, serverBuild } from '../../../library/Minecraft.js';
 import { queryFormData } from '../../../library/build/classes/queryFormData.js';
 import { configurations } from '../../../library/build/configurations.js';
@@ -472,10 +472,12 @@ commandBuild.create(
         const player = data.sender;
 
         serverBuild.tellSelf(player, '§aMove to show UI.');
-    }, (data, args) => {
-        /**
-        * @type {Player}
-        */
+    },
+    /**
+     * @param {ChatSendBeforeEvent} data
+     * @param {Array<String>} args
+     */
+    (data, args) => {
         const player = data.sender;
 
         try {

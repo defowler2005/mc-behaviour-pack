@@ -1,4 +1,4 @@
-import { Player } from "@minecraft/server";
+import { ChatSendBeforeEvent, Player } from "@minecraft/server";
 import { commandBuild, Database, serverBuild } from "../../../library/Minecraft.js";
 import { randomColor } from '../../../library/utils/random_color.js';
 
@@ -14,7 +14,11 @@ commandBuild.create(
             'summondefowler2OO5'
         ]
     },
-    (data, args) => { // Errorful at line 30: Failed to spawnEntity.
+    /**
+     * @param {ChatSendBeforeEvent} data
+     * @param {Array<String>} args
+     */
+    (data, args) => {
         /**
          * @type {Player}
          */
@@ -27,7 +31,7 @@ commandBuild.create(
 
         if (summonAmount >= 3) return serverBuild.tellSelf(player, `§cSorry! The maximum amount of §fdefowler2005§c's that can be summoned is §f3§c, you'll have to wait`);
 
-        const defowler2OO5 = player.dimension.spawnEntity('defow:defowler2OO5', { x: x, y: y, z: z });
+        const defowler2OO5 = player.dimension.spawnEntity('defow:defowler2005', { x: x, y: y, z: z });
 
         defowler2OO5.nameTag = `${colorCode}defowler2OO5`;
     }

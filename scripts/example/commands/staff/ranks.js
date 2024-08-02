@@ -1,4 +1,4 @@
-import { world, Player, system, ChatSendBeforeEventSignal } from '@minecraft/server';
+import { world, Player, system, ChatSendBeforeEvent } from '@minecraft/server';
 import { commandBuild, playerBuild, serverBuild, Database, inputFormData, buttonFormData } from '../../../library/Minecraft.js';
 import { configurations } from '../../../library/build/configurations.js';
 
@@ -17,14 +17,11 @@ commandBuild.create(
         is_staff: true,
         cancel_message: true
     },
-   /**
-    * @param {ChatSendBeforeEventSignal} data
-    * @param { Array<String>
-    */
+    /**
+     * @param {ChatSendBeforeEvent} data
+     * @param {Array<String>} args
+     */
     (data, args) => {
-        /**
-         * @type {Player}
-         */
         const player = data.sender;
         const rawTargetString = args[0]?.replace('@', '');
         const target = world.getAllPlayers().find((plr) => plr.name === rawTargetString);
@@ -82,5 +79,10 @@ commandBuild.create(
                 } else return serverBuild.tellSelf(player, `§cPlayer §f${target.name} §chas no ranks to remove`);
                 break;
         }
-    }, (data, args) => { }
+    }, 
+    /**
+     * @param {ChatSendBeforeEvent} data
+     * @param {Array<String>} args
+     */
+    (data, args) => { }
 );
