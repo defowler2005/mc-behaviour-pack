@@ -6,22 +6,20 @@ import { configurations } from "../configurations";
  */
 class serverBuilder {
     constructor() {
-        /** @type {Player} */
+        /** @type {Array<Player>} */
         this.allStaff = world.getPlayers({ tags: [configurations.staff_tag] });
-        /** @type {Player} */
+        /** @type {Array<Player>} */
         this.allNonStaff = world.getPlayers({ excludeTags: [configurations.staff_tag] });
-        /** @type {Player} */
+        /** @type {Array<Player>} */
         this.allPlayers = world.getAllPlayers();
-        const allDimensions = ['overworld', 'the_end', 'nether'];
-        for (const dim of allDimensions) this.dimensions = world.getDimension(dim);
     };
 
     /**
      * Send a message to all players within the current world.
      * @param {String} message
      */
-    tellServer(message) {
-        world.getAllPlayers().forEach((player) => {
+    tellServer(ignoredSelfPlayer, message) {
+        world.getAllPlayers().filter((plr) => plr.name !== ignoredSelfPlayer.name).forEach((player) => {
             player.sendMessage(`${message?.trim()}`);
         })
     };
