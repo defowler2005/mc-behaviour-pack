@@ -1,7 +1,6 @@
 /**
  * The configurations for the setup.
  */
-
 export const configurations = {
     /** Command prefix in chat. */
     cmd_prefix: 'DF.',
