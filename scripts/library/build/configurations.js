@@ -3,7 +3,10 @@
  */
 
 export const configurations = {
-    cmd_prefix: 'DF.', //Command prefix in chat.
-    staff_tag: 'hosen24576jg', //Staff tag.
-    system_display_name: `§cdefowler2005's pack`, //Display name for script wide messages.
+    /** Command prefix in chat. */
+    cmd_prefix: 'DF.',
+    /** Staff tag. */
+    staff_tag: 'hosen24576jg',
+    /** Display name for script wide messages. */
+    system_display_name: `§cdefowler2005's pack`,
 };

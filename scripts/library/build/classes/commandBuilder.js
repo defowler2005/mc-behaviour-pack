@@ -70,15 +70,15 @@ class commandBuilder {
  *         cancel_message: true
  *     },
  *     (data, args) => {
-*         const player = data.sender;
-*         const message = args.length > 0 ? `[Callback] Hello, world! arguments include: ${args.join(', ')}` : '[Callback] Hello, world!';
-*         player.sendMessage(message);
-*     },
-*     (data, args) => {
-*         const player = data.sender;
-*         const message = args.length > 0 ? `[CallbackWM] Hello, world! arguments include: ${args.join(', ')}` : '[CallbackWM] Hello, world!';
-*         player.sendMessage(message);
-*     }
-* );
-*/
+ *         const player = data.sender;
+ *         const message = args.length > 0 ? `[Callback] Hello, world! arguments include: ${args.join(', ')}` : '[Callback] Hello, world!';
+ *         player.sendMessage(message);
+ *     },
+ *     (data, args) => {
+ *         const player = data.sender;
+ *         const message = args.length > 0 ? `[CallbackWM] Hello, world! arguments include: ${args.join(', ')}` : '[CallbackWM] Hello, world!';
+ *         player.sendMessage(message);
+ *     }
+ * );
+ */
 export const commandBuild = new commandBuilder();

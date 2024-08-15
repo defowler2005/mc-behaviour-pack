@@ -1,6 +1,5 @@
 import { ChatSendBeforeEvent, Player, system, world } from '@minecraft/server';
-import { buttonFormData, commandBuild, Database, inputFormData, playerBuild, serverBuild } from '../../../library/Minecraft.js';
-import { queryFormData } from '../../../library/build/classes/queryFormData.js';
+import { buttonFormData, commandBuild, Database, inputFormData, queryFormData, playerBuild, serverBuild } from '../../../library/Minecraft.js';
 import { configurations } from '../../../library/build/configurations.js';
 import { randomNumber } from '../../../library/utils/randomNumber.js';
 import { scoreTest, setScore } from '../../../library/utils/score_system.js';
@@ -113,7 +112,9 @@ export const gui = {
                         ['Anti-Blues', modules.blues[0].toggles, !!abtoggle]
                     ]
                 },
-                (result) => { }
+                (result) => {
+
+                }
             )
         }
     },
@@ -137,7 +138,7 @@ export const gui = {
                     ]
                 }, (result) => {
                     serverBuild.addTag(player, 'welcome');
-                    if (server.hasTag(configurations.staff_tag) === true) return gui.staff.main(player);
+                    if (serverBuild.hasTag(configurations.staff_tag) === true) return gui.staff.main(player);
                     else gui.player.main(player);
                 }
             );
@@ -185,9 +186,9 @@ export const gui = {
                 for (let module of modules.player) {
                     const current_value = Number(Database.get(`module:${module.module_id}`, player));
                     if (module.toggles.length === 2) {
-                        allPlayerModuleToggles.push([module.disp_name, !!current_value]);
+                        allPlayerModuleToggles.push([module.disp_name, !!current_value]); // Push single on off toggles.
                     } else {
-                        allPlayerModuleDropdowns.push([module.disp_name, module.toggles, current_value]);
+                        allPlayerModuleDropdowns.push([module.disp_name, module.toggles, current_value]); // Push dropdown toggles.
                     }
                 };
 
@@ -234,7 +235,7 @@ export const gui = {
         },
         /**
          * A menu for selecting another player to view all there possible stats.
-         * @param {Player} player 
+         * @param {Player} player
          */
         otherStatsSelection: (player) => {
             const statsSelection = new inputFormData(player);

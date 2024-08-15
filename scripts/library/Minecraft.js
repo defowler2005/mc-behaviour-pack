@@ -1,6 +1,7 @@
 import { system, world } from '@minecraft/server';
 import { modules } from '../example/commands/other/gui.js';
 import { buttonFormData } from './build/classes/buttonFormData.js';
+import { queryFormData } from './build/classes/queryFormData.js';
 import { commandBuild } from './build/classes/commandBuilder.js';
 import { Database } from './build/classes/databaseBuilder.js';
 import { inputFormData } from './build/classes/inputFormData.js';
@@ -38,9 +39,10 @@ world.beforeEvents.chatSend.subscribe((data) => {
 
 export {
     buttonFormData,
+    inputFormData,
+    queryFormData,
     commandBuild,
     Database,
-    inputFormData,
     playerBuild,
     serverBuild
 };

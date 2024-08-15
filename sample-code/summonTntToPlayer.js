@@ -5,6 +5,7 @@ world.beforeEvents.chatSend.subscribe((data) => {
     const message = data.message;
     const prefix = '!';
     const commandNames = ['tnt'];
+
     system.run(() => {
         if (message.startsWith(prefix) === false) return; data.cancel = true;
 

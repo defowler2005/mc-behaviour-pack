@@ -1,6 +1,6 @@
 import { ChatSendBeforeEvent, Player, world } from "@minecraft/server";
 import { commandBuild, Database, serverBuild } from "../../../library/Minecraft.js";
-import { modules } from "../other/gui.js";
+import { modules } from "./gui.js";
 
 commandBuild.create(
     {
