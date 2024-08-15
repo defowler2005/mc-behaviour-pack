@@ -41,6 +41,7 @@ export {
     buttonFormData,
     inputFormData,
     queryFormData,
+    modules,
     commandBuild,
     Database,
     playerBuild,

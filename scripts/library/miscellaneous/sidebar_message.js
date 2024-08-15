@@ -1,6 +1,5 @@
 import { system } from '@minecraft/server';
-import { Database, serverBuild } from '../Minecraft.js';
-import { modules } from '../../example/commands/other/gui.js';
+import { Database, serverBuild, modules } from '../Minecraft.js';
 
 system.runInterval(() => {
     serverBuild.allPlayers.forEach((player) => {
@@ -22,7 +21,7 @@ system.runInterval(() => {
                     fadeInDuration: 0,
                     fadeOutDuration: 0
                 }
-            ); return;
+            ); return
         }
         if (playerSetting === 1) {}
         if (playerSetting === 2) {}

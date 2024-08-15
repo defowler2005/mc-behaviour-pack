@@ -1,7 +1,7 @@
 import { world } from '@minecraft/server';
 import { configurations } from '../build/configurations.js';
 import { Database, serverBuild } from '../Minecraft.js';
-import { modules } from '../../example/commands/other/gui.js';
+import { modules } from '../Minecraft.js';
 
 world.beforeEvents.chatSend.subscribe((data) => {
     const message = data.message;
