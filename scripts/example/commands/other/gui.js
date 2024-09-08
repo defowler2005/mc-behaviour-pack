@@ -81,7 +81,7 @@ export const gui = {
                     button: [
                         ['Close']
                     ]
-                }, (result) => {
+                }, () => {
                     serverBuild.addTag(player, 'welcome');
                     if (serverBuild.hasTag(configurations.staff_tag) === true) return gui.staff.main(player);
                     else gui.player.main(player);
@@ -142,8 +142,14 @@ export const gui = {
                         title: 'Toggle utilities.',
                         dropdown: allPlayerModuleDropdowns,
                         toggle: allPlayerModuleToggles
-                    }, (result) => {
-                        result.formValues?.forEach((a, b) => setModule(player, modules.player[b], Number(a), player))
+                    }, 
+                    /**
+                     * @param {ActionFormResponse} result 
+                     */
+                    (result) => {
+                        result.formValues?.forEach((a, b) => {
+                            setModule(player, modules.player[b], Number(a), player);
+                        })
                     }
                 );
             } catch (error) {
@@ -210,8 +216,6 @@ export const gui = {
             const currentTpaChannel = scoreTest(player, 'tpa');
             const recipient = world.getPlayers().filter((plr) => scoreTest(plr, 'tpa') === currentTpaChannel && player.name !== plr.name)[0];
 
-            console.warn(currentTpaChannel);
-
             stats.create(
                 {
                     title: who ? 'Self stats' : `${target.name}'s stats`,
@@ -244,13 +248,15 @@ export const gui = {
                     ],
                     button: [
                         ['Send a TPA request'],
-                        ['Manage a request']
+                        ['Manage a request'],
+                        ['Back']
                     ]
                 },
                 /** @param {ActionFormResponse} result */
                 (result) => {
                     if (result.selection === 0) gui.player.tpaRequest(player);
                     if (result.selection === 1) gui.player.manageRequest(player);
+                    if (result.selection === 3) gui.player.main(player);
                 }
             );
         },
