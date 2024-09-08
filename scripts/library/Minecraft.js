@@ -1,5 +1,5 @@
 import { system, world } from '@minecraft/server';
-import { modules } from '../example/commands/other/gui.js';
+import { modules } from './build/configurations.js';
 import { buttonFormData } from './build/classes/buttonFormData.js';
 import { queryFormData } from './build/classes/queryFormData.js';
 import { commandBuild } from './build/classes/commandBuilder.js';
@@ -18,7 +18,13 @@ world.beforeEvents.chatSend.subscribe((data) => {
         const { x, y, z } = data.sender.location;
         const args = message.slice(prefix.length).trim().split(new RegExp(/\s+/));
         const cmd = args.shift();
-        const command = commandBuild.commands.find((commands) => commands.name === cmd || commands.aliases.includes(cmd));
+        const command = commandBuild.commands.find(
+            /**
+             * @param {Object} commands
+             * @param {String} [commands.name]
+             * @param {Array<String>} [commands.aliases]
+             */
+            (commands) => commands.name === cmd || commands.aliases.includes(cmd));
 
         if (!message.startsWith(prefix)) return; data.cancel = true;
         if (!command) return sender.sendMessage({ "rawtext": [{ "text": "§c" }, { "translate": "commands.generic.unknown", "with": [`§f${cmd}§c`] }] });
@@ -28,9 +34,7 @@ world.beforeEvents.chatSend.subscribe((data) => {
 
         system.run(() => {
             command.callback(data, args);
-            waitMove(sender, { x, y, z }, () => {
-                command.callbackWM(data, args);
-            });
+            waitMove(sender, { x, y, z }, () => command.callbackWM(data, args));
         });
     } catch (error) {
         console.warn(`An error occurred while running Minecraft.js at main command center: ${error}\n${error.stack}`);
