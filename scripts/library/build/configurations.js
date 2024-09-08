@@ -10,7 +10,7 @@ export const configurations = {
     system_display_name: `§cdefowler2005's pack`,
 };
 
-/** The default basic toggle values for the GUI. */
+/** The default off on toggle values for the GUI. */
 export const basic_toggles = ['§4OFF', '§2ON'];
 
 /**

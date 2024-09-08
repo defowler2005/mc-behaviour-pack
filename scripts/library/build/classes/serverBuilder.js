@@ -64,15 +64,23 @@ class serverBuilder {
      * @param {String} tag
      */
     addTag(player, tag) {
-        player.addTag(tag?.trim());
+       return player.addTag(tag?.trim());
     };
 
     /**
      * @param {Player} player
      * @param {String} tag
      */
+    hasTag(player, tag) {
+       return player.hasTag(tag?.trim());
+    }
+
+    /**
+     * @param {Player} player
+     * @param {String} tag
+     */
     removeTag(player, tag) {
-        player.removeTag(tag?.trim());
+       return player.removeTag(tag?.trim());
     };
 
     /**
@@ -80,7 +88,7 @@ class serverBuilder {
      * @param {String} tag
      */
     addRank(player, tag) {
-        player.addTag(tag.replace('rank:')?.trim());
+       return player.addTag(tag.replace('rank:')?.trim());
     };
 
     /**
@@ -88,7 +96,7 @@ class serverBuilder {
      * @param {String} tag
      */
     removeRank(player, tag) {
-        player.removeTag(tag.replace('rank:')?.trim());
+       return player.removeTag(tag.replace('rank:')?.trim());
     }
 
     /**
