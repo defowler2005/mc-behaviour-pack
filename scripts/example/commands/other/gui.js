@@ -67,7 +67,7 @@ export const gui = {
      * The screen seen when the player first joined or sees this UI.
      */
     welcome: {
-        /** * @param {Player} player */
+        /** @param {Player} player */
         main: (player) => {
             //console.warn('Welcome!');
             const main_welcome = new buttonFormData(player);
@@ -131,9 +131,9 @@ export const gui = {
                 for (let module of modules.player) {
                     const current_value = Number(Database.get(`module:${module.module_id}`, player));
                     if (module.toggles.length === 2) {
-                        allPlayerModuleToggles.push([module.disp_name, !!current_value]); // Push single on off toggles.
+                        allPlayerModuleToggles.push([module.disp_name, Boolean(current_value)]); // Off on toggles.
                     } else {
-                        allPlayerModuleDropdowns.push([module.disp_name, module.toggles, current_value]); // Push dropdown toggles.
+                        allPlayerModuleDropdowns.push([module.disp_name, module.toggles, current_value]); // Dropdown toggles.
                     }
                 };
 
@@ -143,13 +143,11 @@ export const gui = {
                         dropdown: allPlayerModuleDropdowns,
                         toggle: allPlayerModuleToggles
                     }, (result) => {
-                        result.formValues?.forEach((a, b) => {
-                            setModule(player, modules.player[b], Number(a), player);
-                        })
+                        result.formValues?.forEach((a, b) => setModule(player, modules.player[b], Number(a), player))
                     }
                 );
             } catch (error) {
-                console.error(error)
+                console.error(`An error occured while running player modules: ${error}\n${error.stack}`);
             };
         },
 
@@ -205,15 +203,18 @@ export const gui = {
          */
         stats: (player, target = player) => {
             const stats = new buttonFormData(player);
+            const who = target.name === player.name;
             const kills = scoreTest(target, 'kills');
             const deaths = scoreTest(target, 'deaths');
             const killstreak = scoreTest(target, 'killstreak');
             const currentTpaChannel = scoreTest(player, 'tpa');
             const recipient = world.getPlayers().filter((plr) => scoreTest(plr, 'tpa') === currentTpaChannel && player.name !== plr.name)[0];
+
             console.warn(currentTpaChannel);
+
             stats.create(
                 {
-                    title: target.name === player.name ? 'Self stats' : `${target.name}'s stats`,
+                    title: who ? 'Self stats' : `${target.name}'s stats`,
                     body: [
                         ['§d§lCombat:'],
                         [`§bKills §7:§c${kills} §bDeaths §7:§c${deaths} §bKillstreak §7:§c${killstreak}`],
