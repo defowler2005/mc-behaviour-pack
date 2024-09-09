@@ -6,22 +6,22 @@ system.runInterval(() => {
         const serverSetting = Database.get(`module:${modules.staff[2]}`);
         const playerSetting = Database.get(`module:${modules.player[0]}`, player);
 
-        if (serverSetting >= 1) {
+        if (serverSetting >= 1) { // If the serverSetting is toggled on which overwrites player options.
             player.onScreenDisplay.setTitle(
                 {
                     "rawtext": [
                         {
-                            "text": `TESTING.`
+                            "text": `Server global`
                         }
                     ]
                 },
                 {
-                    subtitle: '§¶§l§ddefowler2005\'s §gWorld',
+                    subtitle: '',
                     stayDuration: 20,
                     fadeInDuration: 0,
                     fadeOutDuration: 0
                 }
-            ); return
+            ); return;
         }
         if (playerSetting === 1) {}
         if (playerSetting === 2) {}
