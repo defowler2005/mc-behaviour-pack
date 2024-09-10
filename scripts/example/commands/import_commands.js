@@ -1,6 +1,7 @@
 // Staff commands.
 
 import './staff/ranks.js';
+import './staff/inventory.js';
 
 // Non staff commands.
 
