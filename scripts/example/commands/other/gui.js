@@ -101,12 +101,12 @@ export const gui = {
 
             main_player.create(
                 {
-                    title: 'Non staff UI.',
+                    title: 'Non staff UI.', 
                     body: [
                         ['Non staff player utility UI.']
                     ],
                     button: [
-                        ['Modules'],
+                        ['Modules', 'textures/ui/gear'],
                         ['Stats'],
                         ['TPA options']
                     ]
@@ -142,7 +142,7 @@ export const gui = {
                         title: 'Toggle utilities.',
                         dropdown: allPlayerModuleDropdowns,
                         toggle: allPlayerModuleToggles
-                    }, 
+                    },
                     /**
                      * @param {ActionFormResponse} result 
                      */
@@ -382,11 +382,8 @@ export const gui = {
 
                 for (let module of modules.staff) {
                     const current_value = Number(Database.get(`module:${module.module_id}`));
-                    if (module.toggles.length === 2) {
-                        allStaffModuleToggles.push([module.disp_name, !!current_value]);
-                    } else {
-                        allStaffModuleDropdowns.push([module.disp_name, module.toggles, current_value]);
-                    }
+                    if (module.toggles.length === 2) allStaffModuleToggles.push([module.disp_name, !!current_value]);
+                    else allStaffModuleDropdowns.push([module.disp_name, module.toggles, current_value]);
                 };
 
                 utility_modules.create(
@@ -397,9 +394,7 @@ export const gui = {
                     },
                     /** @param {ModalFormResponse} result */
                     (result) => {
-                        result.formValues?.forEach((a, b) => {
-                            setModule(player, modules.staff[b], Number(a));
-                        })
+                        result.formValues?.forEach((a, b) => setModule(player, modules.staff[b], Number(a)));
                     }
                 );
             } catch (error) {

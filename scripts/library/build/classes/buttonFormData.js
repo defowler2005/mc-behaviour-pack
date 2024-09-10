@@ -48,7 +48,7 @@ export class buttonFormData {
      * @param {string} info.title - The title of the form.
      * @param {Array<[String]>} info.body - The body text of the form.
      * @param {Array<[String, String]>} info.button - The buttons to add to the form, each represented by a name and an icon.
-     * @param {Function(ActionFormResponse): Void} callback - The callback function to execute when the form is submitted.
+     * @param {Function(ActionFormResponse)} callback - The callback function to execute when the form is submitted.
      */
     create(info, callback) {
         try {
@@ -56,10 +56,9 @@ export class buttonFormData {
             this.form.body(info.body.join('\n§r'));
             for (const [name, icon] of info.button) this.form.button(name, icon);
             this.form.show(this.player).then(
-                /** @param {ActionFormResponse} result */
                 (result) => {
                     if (result.canceled) return;
-                    callback(result)
+                    callback(result);
                 }
             );
         } catch (error) {
