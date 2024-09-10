@@ -18,13 +18,18 @@ commandBuild.create(
      * @param {ChatSendBeforeEvent} data
      * @param {Array<String>} args
      */
-    (data, args) => {
+    (data, args) => { // Incomplete.
         const sender = data.sender;
-        const targetString = args[0];
-        const target = world.getPlayers({ name: targetString});
+        const targetString = args[0]?.replace('@', '');
+        const action = args[1];
+        const actionList = ['view', 'wipe', 'clearitem'];
+        const target = world.getPlayers({ name: `${targetString}`});
 
-        if (target) {
-            
+        if (!targetString) return serverBuild.tellSelf(sender, `§cYou must provide a target.`);
+        if (!action) return serverBuild.tellSelf(sender, `§c.You must provide an action.`);
+        if (!actionList.includes(action)) return serverBuild.tellSelf(sender, `§cInvalid action. Actions include: §f${actionList.join('§c,§r ')}`); // action.charAt(0).toUpperCase() + action.slice(1)
+        if (target.length) {
+
         } else return serverBuild.tellSelf(sender, `§cThe player by the name ${targetString} was not found.`);
     },
     /**
