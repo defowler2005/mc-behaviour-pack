@@ -24,9 +24,9 @@ class DatabaseBuilder {
             }
             // console.warn(`Set module ${key} to ${value}`);
         } catch (error) {
-            // console.warn(`An error occurred while setting dynamic property '${key}' in database: ${error}`);
+            //console.warn(`An error occurred while setting dynamic property '${key}' in database: ${error}`);
         }
-    }
+    };
 
     /**
      * Gets the value of a dynamic property from the world or player.
@@ -48,7 +48,7 @@ class DatabaseBuilder {
             return 0;
         }
         return value;
-    }
+    };
 
     /**
      * Deletes a dynamic property from the world or player.
@@ -72,7 +72,7 @@ class DatabaseBuilder {
             }
         }
     }
-}
+};
 
 /**
  * A class for interacting with Dynamic properties in a database-like system.

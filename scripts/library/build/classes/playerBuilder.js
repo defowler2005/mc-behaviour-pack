@@ -34,7 +34,7 @@ class playerBuilder {
 
             if (!item) continue;
 
-            allItems.push({item, slot: i, inventory});
+            allItems.push({ item, slot: i, inventory });
         }; return allItems;
     };
 
@@ -48,25 +48,31 @@ class playerBuilder {
      */
     getEquipment(player) {
         let allItems = [];
-        const allSlots = [
-            'Chest',
-            'Feet',
-            'Head',
-            'Legs',
-            'Mainhand',
-            'Offhand',
-        ];
 
-        const equipment = player.getComponent(EntityComponentTypes.Equippable);
+        try {
+            const allSlots = [
+                'Chest',
+                'Feet',
+                'Head',
+                'Legs',
+                'Mainhand',
+                'Offhand',
+            ];
 
-        for (const slot of allSlots) {
-            const item = equipment.getEquipmentSlot(slot);
+            const equipment = player.getComponent(EntityComponentTypes.Equippable);
 
-            if (!item.hasItem()) continue;
+            for (const slot of allSlots) {
+                const item = equipment.getEquipmentSlot(slot);
 
-            allItems.push(item);
-        }; //system.runTimeout(() => console.warn('The error you just saw is nothing to worry about'), 1);
-        return allItems;
+                if (!item.hasItem()) continue;
+
+                allItems.push(item);
+            };
+        } catch (error) {
+            const error_msg = `${error}`;
+
+            console.warn(`An error occurred while running getEquipment: ${error_msg}\n${error.stack}`);
+        }; return allItems;
     };
 };
 

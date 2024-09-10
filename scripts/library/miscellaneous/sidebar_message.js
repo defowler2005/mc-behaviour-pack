@@ -6,7 +6,7 @@ system.runInterval(() => {
         const serverSetting = Database.get(`module:${modules.staff[2]}`);
         const playerSetting = Database.get(`module:${modules.player[0]}`, player);
 
-        if (serverSetting >= 1) { // If the serverSetting is toggled on which overwrites player options.
+        if (serverSetting >= 1 || playerSetting === 3) { // If the serverSetting is toggled on which overwrites player options.
             player.onScreenDisplay.setTitle(
                 {
                     "rawtext": [
@@ -21,11 +21,17 @@ system.runInterval(() => {
                     fadeInDuration: 0,
                     fadeOutDuration: 0
                 }
-            ); return;
+            );
         }
-        if (playerSetting === 1) {}
-        if (playerSetting === 2) {}
-        if (playerSetting === 3) {}
+        if (playerSetting === 1) {
+
+        }
+        if (playerSetting === 2) {
+
+        }
+        if (playerSetting === 3) {
+
+        }
         //console.warn(modules.player[0].toggles[playerSetting])
     })
 }, 10);

@@ -13,7 +13,7 @@ export function scoreTest(player, objective) {
 };
 
 /**
- * Get the value of a players scoreboard.
+ * Set the value of a players scoreboard.
  * @param {Player} player
  * @param {String} objective
  */
