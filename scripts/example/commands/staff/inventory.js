@@ -8,8 +8,12 @@ commandBuild.create(
     {
         name: 'inventory',
         description: '',
-        usage: ['inventory'],
-        example: ['inventory', 'inv'],
+        usage: ['inventory [ @player ] [ view | wipe | clearitem ] [ item_name ]'],
+        example: [
+            'inventory @defowler2OO5 view',
+            'inventory @defowler2OO5 wipe',
+            'inventory @defowler2OO5 clearitem'
+        ],
         aliases: ['inv'],
         is_staff: true,
         cancel_message: true
@@ -23,14 +27,34 @@ commandBuild.create(
         const targetString = args[0]?.replace('@', '');
         const action = args[1];
         const actionList = ['view', 'wipe', 'clearitem'];
-        const target = world.getPlayers({ name: `${targetString}`});
+        const target = world.getPlayers({ name: `${targetString}` });
 
         if (!targetString) return playerBuild.tellSelf(sender, `§cYou must provide a target.`);
-        if (!action) return playerBuild.tellSelf(sender, `§c.You must provide an action.`);
-        if (!actionList.includes(action)) return playerBuild.tellSelf(sender, `§cInvalid action. Actions include: §f${actionList.join('§c,§r ')}`); // action.charAt(0).toUpperCase() + action.slice(1)
-        if (target.length > 0) {
-            playerBuild.tellSelf('Working!');
-        } else return playerBuild.tellSelf(sender, `§cThe player by the name ${targetString} was not found.`);
+        if (!action) return playerBuild.tellSelf(sender, `§cYou must provide an action.`);
+        if (!target.length) playerBuild.tellSelf(sender, `§cA player by the name ${targetString} was not found.`);
+
+        switch (action) {
+            case actionList[0]:
+                /** @type {Array<String>} */
+                const text = [];
+                const equipmentItems = playerBuild.getEquipment(target);
+
+                text.join(`§9Helmet: §c${equipmentItems[0].nameTag || 'None'}`);
+
+                playerBuild.tellSelf(sender, text.join('\n§r'));
+                break;
+            case actionList[1]:
+                playerBuild.getInventory(sender).forEach((item) => {
+                    console.warn(sender, `Items in inventory: ${item.typeId}`);
+                });
+                break;
+            case actionList[2]:
+
+                break;
+            default:
+                playerBuild.tellSelf(sender, `§cInvalid action. Actions include: §f${actionList.join('§c,§r ')}`); // action.charAt(0).toUpperCase() + action.slice(1);
+                break;
+        }
     },
     /**
      * @param {ChatSendBeforeEvent} data

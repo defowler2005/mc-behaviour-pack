@@ -9,6 +9,7 @@ class playerBuilder {
     /**
      * Send a message to a specified player.
      * @param {String} message
+     * @param {Player} player
      */
     tellSelf(player, message) {
         player.sendMessage(message?.trim());
@@ -59,7 +60,7 @@ class playerBuilder {
      * @param {Player} player
      * @example
      * playerBuild.getInventory(player).forEach((item) => {
-            playerBuild.tellSelf(player, `Items in inv: ${item.typeId}`);
+            playerBuild.tellSelf(player, `Items in inventory: ${item.typeId}`);
         });
      */
     getInventory(player) {
