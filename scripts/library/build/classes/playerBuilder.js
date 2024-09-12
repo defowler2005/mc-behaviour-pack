@@ -1,4 +1,4 @@
-import { system, Player, EntityComponentTypes } from '@minecraft/server';
+import { system, Player, EntityComponentTypes, ItemStack } from '@minecraft/server';
 
 /**
  * A class for running player related functions.
@@ -80,9 +80,9 @@ class playerBuilder {
      * Get all items within a players equipment slots.
      * @param {Player} player
      * @example
-        playerBuild.getEquipment(player).forEach((item) => {
-            playerBuild.tellSelf(player, `Items in eq: ${item.typeId}`);
-        });        
+     *  playerBuild.getEquipment(player).forEach((item) => {
+     *      playerBuild.tellSelf(player, `Items in eq: ${item.typeId}`);
+     *  });        
      */
     getEquipment(player) {
         let allItems = [];
@@ -109,7 +109,7 @@ class playerBuilder {
         } catch (error) {
             const error_msg = `${error}`;
 
-            if (error_msg.includes('')) return;
+            //if (error_msg.includes('')) return;
 
             console.warn(`An error occurred while running getEquipment in playerBuilder class: ${error_msg}\n${error.stack}`);
         }; return allItems;

@@ -28,8 +28,8 @@ commandBuild.create(
         if (!targetString) return playerBuild.tellSelf(sender, `§cYou must provide a target.`);
         if (!action) return playerBuild.tellSelf(sender, `§c.You must provide an action.`);
         if (!actionList.includes(action)) return playerBuild.tellSelf(sender, `§cInvalid action. Actions include: §f${actionList.join('§c,§r ')}`); // action.charAt(0).toUpperCase() + action.slice(1)
-        if (target.length) {
-
+        if (target.length > 0) {
+            playerBuild.tellSelf('Working!');
         } else return playerBuild.tellSelf(sender, `§cThe player by the name ${targetString} was not found.`);
     },
     /**
