@@ -37,13 +37,13 @@ commandBuild.create(
             case actionList[0]:
                 /** @type {Array<String>} */
                 const text = [];
-                const equipmentItems = playerBuild.getEquipment(target);
 
-                text.join(`§9Helmet: §c${equipmentItems[0].nameTag || 'None'}`);
+                text.join(`§9Helmet: §c`);
 
                 playerBuild.tellSelf(sender, text.join('\n§r'));
                 break;
             case actionList[1]:
+                console.warn('f')
                 playerBuild.getInventory(sender).forEach((item) => {
                     console.warn(sender, `Items in inventory: ${item.typeId}`);
                 });
