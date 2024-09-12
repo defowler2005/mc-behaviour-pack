@@ -20,9 +20,9 @@ world.beforeEvents.chatSend.subscribe((data) => {
         const cmd = args.shift();
         const command = commandBuild.commands.find(
             /**
-             * @param {Object} commands
-             * @param {String} [commands.name]
-             * @param {Array<String>} [commands.aliases]
+             * @param {Object} commands - A list of all registered commands.
+             * @param {String} [commands.name] - The name of the command.
+             * @param {Array<String>} [commands.aliases] - Other names for the command.
              */
             (commands) => commands.name === cmd || commands.aliases.includes(cmd));
 

@@ -25,12 +25,12 @@ commandBuild.create(
         const actionList = ['view', 'wipe', 'clearitem'];
         const target = world.getPlayers({ name: `${targetString}`});
 
-        if (!targetString) return serverBuild.tellSelf(sender, `§cYou must provide a target.`);
-        if (!action) return serverBuild.tellSelf(sender, `§c.You must provide an action.`);
-        if (!actionList.includes(action)) return serverBuild.tellSelf(sender, `§cInvalid action. Actions include: §f${actionList.join('§c,§r ')}`); // action.charAt(0).toUpperCase() + action.slice(1)
+        if (!targetString) return playerBuild.tellSelf(sender, `§cYou must provide a target.`);
+        if (!action) return playerBuild.tellSelf(sender, `§c.You must provide an action.`);
+        if (!actionList.includes(action)) return playerBuild.tellSelf(sender, `§cInvalid action. Actions include: §f${actionList.join('§c,§r ')}`); // action.charAt(0).toUpperCase() + action.slice(1)
         if (target.length) {
 
-        } else return serverBuild.tellSelf(sender, `§cThe player by the name ${targetString} was not found.`);
+        } else return playerBuild.tellSelf(sender, `§cThe player by the name ${targetString} was not found.`);
     },
     /**
      * @param {ChatSendBeforeEvent} data

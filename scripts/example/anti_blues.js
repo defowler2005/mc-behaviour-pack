@@ -18,7 +18,7 @@ system.runInterval(() => {
                 const pumpkin = new ItemStack('minecraft:carved_pumpkin', 1);
                 blues.getComponent('minecraft:equippable').setEquipment(EquipmentSlot.Head, pumpkin);
                 itemObj.inventory.getSlot(itemObj.slot).setItem();
-                serverBuild.tellSelf(blues, `§cAnti-Blues > §gCleared §9${itemObj.item.typeId.replace('minecraft:', '').replace('_', ' ')} from ${bluesName}§g inventory :(`);
+                playerBuild.tellSelf(blues, `§cAnti-Blues > §gCleared §9${itemObj.item.typeId.replace('minecraft:', '').replace('_', ' ')} from ${bluesName}§g inventory :(`);
             }
         });
     } catch (error) {
@@ -35,7 +35,7 @@ world.beforeEvents.playerPlaceBlock.subscribe((data) => {
     if (abtoggle !== 1 || abtoggle !== 3 && blues.nameTag !== bluesName) return;
 
     data.cancel = true;
-    serverBuild.tellSelf(blues, '§cAnti-Blues > §bAnti-Place §gblock prevented you from placing any blocks.');
+    playerBuild.tellSelf(blues, '§cAnti-Blues > §bAnti-Place §gblock prevented you from placing any blocks.');
 });
 
 world.beforeEvents.playerBreakBlock.subscribe((data) => {
@@ -45,5 +45,5 @@ world.beforeEvents.playerBreakBlock.subscribe((data) => {
     if (abtoggle !== 1 || abtoggle !== 3 && blues.nameTag !== bluesName) return;
 
     data.cancel = true;
-    serverBuild.tellSelf(blues, '§cAnti-Blues > §bAnti-Break §gblock prevented you from breaking any blocks.');
+    playerBuild.tellSelf(blues, '§cAnti-Blues > §bAnti-Break §gblock prevented you from breaking any blocks.');
 });

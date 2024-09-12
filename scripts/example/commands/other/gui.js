@@ -23,7 +23,7 @@ const setModule = (player, module, newValue, nonstaffPlayer = undefined) => {
         const message = `§b${nonstaffPlayer ? 'Successfully set the module' : `Player §c${player.name} §bhas set the module`} §g${module.disp_name}§b to §r${module.toggles[newValue]}`;
 
         if (nonstaffPlayer) {
-            serverBuild.tellSelf(nonstaffPlayer, message);
+            playerBuild.tellSelf(nonstaffPlayer, message);
             Database.set(moduleKey, newValue, nonstaffPlayer);
         } else {
             serverBuild.tellServer(message);
@@ -82,8 +82,8 @@ export const gui = {
                         ['Close']
                     ]
                 }, () => {
-                    serverBuild.addTag(player, 'welcome');
-                    if (serverBuild.hasTag(configurations.staff_tag) === true) return gui.staff.main(player);
+                    playerBuild.addTag(player, 'welcome');
+                    if (playerBuild.hasTag(configurations.staff_tag) === true) return gui.staff.main(player);
                     else gui.player.main(player);
                 }
             );
@@ -282,10 +282,10 @@ export const gui = {
                         const randomNumberIndex = randomNumber(100, 9999999);
                         setScore(player, 'tpa', randomNumberIndex);
                         setScore(target, 'tpa', randomNumberIndex);
-                        serverBuild.tellSelf(target, `Player ${player.name} has sent a TPA request to you.`);
-                        serverBuild.tellSelf(player, `Successfully sent a TPA request to ${target.name}.`);
+                        playerBuild.tellSelf(target, `Player ${player.name} has sent a TPA request to you.`);
+                        playerBuild.tellSelf(player, `Successfully sent a TPA request to ${target.name}.`);
                     } else {
-                        // serverBuild.tellSelf(player, '§4No other players in the world.');
+                        // playerBuild.tellSelf(player, '§4No other players in the world.');
                         return;
                     }
                 }
@@ -313,13 +313,13 @@ export const gui = {
                     const recipient = world.getPlayers().filter((plr) => scoreTest(plr, 'tpa') === currentTpaChannel && player.name !== plr.name)[0];
 
                     if (result.selection === 1) {
-                        serverBuild.tellSelf(recipient, `Your TPA request has been accepted by ${player.name}.`);
-                        serverBuild.tellSelf(player, `You have accepted the TPA request from ${recipient.name}.`);
+                        playerBuild.tellSelf(recipient, `Your TPA request has been accepted by ${player.name}.`);
+                        playerBuild.tellSelf(player, `You have accepted the TPA request from ${recipient.name}.`);
                     } else if (result.selection === 0) {
                         setScore(player, 'tpa', 0);
                         setScore(recipient, 'tpa', 0);
-                        serverBuild.tellSelf(recipient, `Your TPA request has been declined by ${player.name}.`);
-                        serverBuild.tellSelf(player, `You have declined the TPA request from ${recipient.name}.`);
+                        playerBuild.tellSelf(recipient, `Your TPA request has been declined by ${player.name}.`);
+                        playerBuild.tellSelf(player, `You have declined the TPA request from ${recipient.name}.`);
                     }
                 }
             )
@@ -419,7 +419,7 @@ commandBuild.create(
         */
         const player = data.sender;
 
-        serverBuild.tellSelf(player, '§aMove to show UI.');
+        playerBuild.tellSelf(player, '§aMove to show UI.');
     },
     /**
      * @param {ChatSendBeforeEvent} data

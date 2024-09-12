@@ -7,7 +7,7 @@ class DatabaseBuilder {
     /**
      * Constructs a new databaseBuilder instance.
      */
-    constructor() { }
+    constructor() { };
 
     /**
      * Sets a dynamic property in the world or player.
@@ -46,8 +46,7 @@ class DatabaseBuilder {
             //console.warn(`Dynamic property '${key}' does not exist!`);
             this.set(key, 0, player);
             return 0;
-        }
-        return value;
+        }; return value;
     };
 
     /**

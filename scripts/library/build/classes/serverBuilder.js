@@ -1,5 +1,5 @@
 import { Player, CommandResult, world } from "@minecraft/server";
-import { configurations } from "../configurations";
+import { configurations } from "../configurations.js";
 
 /**
  * A class for running server related functions.
@@ -50,54 +50,6 @@ class serverBuilder {
             player.sendMessage(`${message?.trim()}`);
         })
     };
-
-    /**
-     * Send a message to a specified player.
-     * @param {String} message
-     */
-    tellSelf(player, message) {
-        player.sendMessage(message?.trim());
-    };
-
-    /**
-     * @param {Player} player
-     * @param {String} tag
-     */
-    addTag(player, tag) {
-       return player.addTag(tag?.trim());
-    };
-
-    /**
-     * @param {Player} player
-     * @param {String} tag
-     */
-    hasTag(player, tag) {
-       return player.hasTag(tag?.trim());
-    }
-
-    /**
-     * @param {Player} player
-     * @param {String} tag
-     */
-    removeTag(player, tag) {
-       return player.removeTag(tag?.trim());
-    };
-
-    /**
-     * @param {Player} player
-     * @param {String} tag
-     */
-    addRank(player, tag) {
-       return player.addTag(tag.replace('rank:')?.trim());
-    };
-
-    /**
-     * @param {Player} player
-     * @param {String} tag
-     */
-    removeRank(player, tag) {
-       return player.removeTag(tag.replace('rank:')?.trim());
-    }
 
     /**
      * Execute an array of commands at once.

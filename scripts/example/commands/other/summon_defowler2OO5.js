@@ -39,16 +39,16 @@ commandBuild.create(
                 entities.forEach((entity) => entity.kill());
             });
 
-            serverBuild.tellSelf(player, `§aSuccessfully §ckilled §aall defowler2005's.`);
+            playerBuild.tellSelf(player, `§aSuccessfully §ckilled §aall defowler2005's.`);
             Database.set('misc:summoneddefow', 0, player);
             return;
         };
 
         const summonAmount = Number(Database.get('misc:summoneddefow', player)) || 0;
-        if (summonAmount >= 3) return serverBuild.tellSelf(player, `§cSorry! The maximum number of §fdefowler2005§c's that can be summoned is §f3§c, you'll have to wait till they die or you can run the command§b ${configurations.cmd_prefix}§csummondefowler2OO5 killall`);
+        if (summonAmount >= 3) return playerBuild.tellSelf(player, `§cSorry! The maximum number of §fdefowler2005§c's that can be summoned is §f3§c, you'll have to wait till they die or you can run the command§b ${configurations.cmd_prefix}§csummondefowler2OO5 killall`);
 
         const defowler2OO5 = player.dimension.spawnEntity('defow:defowler2005', { x, y, z });
-        serverBuild.tellSelf(player, `§aSuccessfully spawned a defowler2005 with the name "${finalName}§r"`);
+        playerBuild.tellSelf(player, `§aSuccessfully spawned a defowler2005 with the name "${finalName}§r"`);
         serverBuild.tellServer(`§aPlayer §f${player.name}§a spawned a §fdefowler2005§a with the name §8"§r${finalName}§8"§r`, player);
         Database.set('misc:summoneddefow', summonAmount + 1, player);
         defowler2OO5.nameTag = finalName;

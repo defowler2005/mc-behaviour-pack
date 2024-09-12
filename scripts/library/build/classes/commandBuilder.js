@@ -34,7 +34,7 @@ class commandBuilder {
                 is_staff: info.is_staff || false,
                 cancel_message: info.cancel_message || true,
                 callback: callback || (() => { console.warn('Callback[0] is successfully executed!') }),
-                callbackWM: callbackWM || (() => { })
+                callbackWM: callbackWM || (() => { /** console.warn('CallbakWM[0] is successfully executed!') */ })
             }
         )
     }

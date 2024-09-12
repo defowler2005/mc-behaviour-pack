@@ -1,5 +1,5 @@
 import { Player, ChatSendBeforeEvent } from '@minecraft/server';
-import { commandBuild, serverBuild } from '../../library/Minecraft.js';
+import { commandBuild, playerBuild, serverBuild } from '../../library/Minecraft.js';
 import { configurations } from '../../library/build/configurations.js';
 
 commandBuild.create(
@@ -44,7 +44,7 @@ commandBuild.create(
                 text.push(`§9For Staff Only?: §c${commandFound.is_staff ? '§2Yes' : '§4No'}`);
                 text.push(`§9Cancel Chat Message?: §c${commandFound.cancel_message ? '§2Yes' : '§4No'}`);
 
-                //if (playerBuild.hasTag(configurations.staff_tag) === false || player.isOp() === false) return serverBuild.tellSelf(player, '§cCouldn\'t view the source code as you are not staff.');
+                //if (playerBuild.hasTag(configurations.staff_tag) === false || player.isOp() === false) return playerBuild.tellSelf(player, '§cCouldn\'t view the source code as you are not staff.');
                 if (args[1] === 'view_code') {
                     text.push(`\n§9Callback: \n§r${commandFound.callback.toString()}\n`);
                     text.push(`§9CallbackWM: \n§r${commandFound.callbackWM.toString()}`);
@@ -54,6 +54,6 @@ commandBuild.create(
             text.push(`§bList of All Registered Commands:`);
             text.push(`§9Custom Command Prefix: §b${prefix}`);
             commandBuild.getAllCommands().forEach((command) => text.push(`§9${command.name}`));
-        }; serverBuild.tellSelf(player, text.join('\n'));
+        }; playerBuild.tellSelf(player, text.join('\n'));
     }
 );

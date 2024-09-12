@@ -33,7 +33,7 @@ commandBuild.create(
             serverBuild.tellServer(`Player ${player.name} has set Blues 8s bit's fate to ${modules.blues[0].toggles[args[0]]}`, );
             Database.set(`module:${modules.blues[0].module_id}`, args[0]);
         } else {
-            serverBuild.tellSelf(player, `Invalid option or no arguments provided. Valid options include: \n${options.join(', ')}`);
+            playerBuild.tellSelf(player, `Invalid option or no arguments provided. Valid options include: \n${options.join(', ')}`);
         }
     }
 );

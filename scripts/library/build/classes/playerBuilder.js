@@ -7,21 +7,59 @@ class playerBuilder {
     constructor() { };
 
     /**
-     * Check if a player has a specific tag.
+     * Send a message to a specified player.
+     * @param {String} message
+     */
+    tellSelf(player, message) {
+        player.sendMessage(message?.trim());
+    };
+
+    /**
      * @param {Player} player
      * @param {String} tag
-     * @returns {Boolean}
+     */
+    addTag(player, tag) {
+        return player.addTag(tag?.trim());
+    };
+
+    /**
+     * @param {Player} player
+     * @param {String} tag
      */
     hasTag(player, tag) {
         return player.hasTag(tag?.trim());
+    }
+
+    /**
+     * @param {Player} player
+     * @param {String} tag
+     */
+    removeTag(player, tag) {
+        return player.removeTag(tag?.trim());
     };
+
+    /**
+     * @param {Player} player
+     * @param {String} tag
+     */
+    addRank(player, tag) {
+        return player.addTag(tag.replace('rank:')?.trim());
+    };
+
+    /**
+     * @param {Player} player
+     * @param {String} tag
+     */
+    removeRank(player, tag) {
+        return player.removeTag(tag.replace('rank:')?.trim());
+    }
 
     /**
      * Get all items within a players inventory.
      * @param {Player} player
      * @example
      * playerBuild.getInventory(player).forEach((item) => {
-            serverBuild.tellSelf(player, `Items in inv: ${item.typeId}`);
+            playerBuild.tellSelf(player, `Items in inv: ${item.typeId}`);
         });
      */
     getInventory(player) {
@@ -43,7 +81,7 @@ class playerBuilder {
      * @param {Player} player
      * @example
         playerBuild.getEquipment(player).forEach((item) => {
-            serverBuild.tellSelf(player, `Items in eq: ${item.typeId}`);
+            playerBuild.tellSelf(player, `Items in eq: ${item.typeId}`);
         });        
      */
     getEquipment(player) {
@@ -71,7 +109,9 @@ class playerBuilder {
         } catch (error) {
             const error_msg = `${error}`;
 
-            console.warn(`An error occurred while running getEquipment: ${error_msg}\n${error.stack}`);
+            if (error_msg.includes('')) return;
+
+            console.warn(`An error occurred while running getEquipment in playerBuilder class: ${error_msg}\n${error.stack}`);
         }; return allItems;
     };
 };
