@@ -54,6 +54,32 @@ class playerBuilder {
     removeRank(player, tag) {
         return player.removeTag(tag.replace('rank:')?.trim());
     };
+
+    /**
+     * A functioon to fetch every item a player has.
+     * @param {Player} player 
+     */
+    getInventory(player) {
+        const inv = player.getComponent(EntityComponentTypes.Inventory).container;
+        const equ = player.getComponent(EntityComponentTypes.Equippable);
+        const allEquipmentSlots = [
+            'Head',
+            'Chest',
+            'Legs',
+            'Feet',
+            'Mainhand',
+            'Offhand'
+        ];
+        let allItems = {};
+
+        for (const type of allEquipmentSlots) {
+           allItems += equ.getEquipment(type);
+        };
+
+        for (let i = 0; i < inv.size; i++) {
+           allItems += inv.getSlot(i);
+        }; return allItems;
+    };
 };
 
 /**

@@ -43,10 +43,7 @@ commandBuild.create(
                 playerBuild.tellSelf(sender, text.join('\n§r'));
                 break;
             case actionList[1]:
-                console.warn('f')
-                playerBuild.getInventory(sender).forEach((item) => {
-                    console.warn(sender, `Items in inventory: ${item.typeId}`);
-                });
+                console.warn(actionList[1]);
                 break;
             case actionList[2]:
 
