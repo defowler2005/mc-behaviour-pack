@@ -35,12 +35,10 @@ commandBuild.create(
 
         switch (action) {
             case actionList[0]:
-                /** @type {Array<String>} */
-                const text = [];
-
-                text.join(`§9Helmet: §c`);
-
-                playerBuild.tellSelf(sender, text.join('\n§r'));
+                playerBuild.getInventory(sender).forEach((item) => {
+                    playerBuild.tellSelf(sender, `${item.typeId}`);
+                })
+                
                 break;
             case actionList[1]:
                 console.warn(actionList[1]);

@@ -70,14 +70,15 @@ class playerBuilder {
             'Mainhand',
             'Offhand'
         ];
-        let allItems = {};
+        /** @type {Array<ItemStack>} */
+        let allItems = [];
 
         for (const type of allEquipmentSlots) {
-           allItems += equ.getEquipment(type);
+           allItems.join(equ.getEquipment(type));
         };
 
         for (let i = 0; i < inv.size; i++) {
-           allItems += inv.getSlot(i);
+           allItems.join(inv.getSlot(i));
         }; return allItems;
     };
 };
