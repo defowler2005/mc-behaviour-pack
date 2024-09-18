@@ -35,16 +35,21 @@ commandBuild.create(
 
         switch (action) {
             case actionList[0]:
+                /**
                 playerBuild.getInventory(sender).forEach((item) => {
                     playerBuild.tellSelf(sender, `${item.typeId}`);
-                })
-                
+                });
+                */
                 break;
             case actionList[1]:
                 console.warn(actionList[1]);
                 break;
-            case actionList[2]:
+            case actionList[2]: // Incomplete or incorrect.
+               const inventory = target.getComponent('minecraft:inventory').component;
 
+                for (let i = 0; i < inventory.size; i++) {
+                   inventory.setItem(i);
+                }; 
                 break;
             default:
                 playerBuild.tellSelf(sender, `§cInvalid action. Actions include: §f${actionList.join('§c,§r ')}`); // action.charAt(0).toUpperCase() + action.slice(1);
