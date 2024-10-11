@@ -27,7 +27,7 @@ commandBuild.create(
         const targetString = args[0]?.replace('@', '');
         const action = args[1];
         const actionList = ['view', 'wipe', 'clearitem'];
-        const target = world.getPlayers({ name: `${targetString}` });
+        const target = world.getPlayers({ name: `${targetString}` })[0];
 
         if (!targetString) return playerBuild.tellSelf(sender, `§cYou must provide a target.`);
         if (!action) return playerBuild.tellSelf(sender, `§cYou must provide an action.`);
@@ -45,11 +45,11 @@ commandBuild.create(
                 console.warn(actionList[1]);
                 break;
             case actionList[2]: // Incomplete or incorrect.
-               const inventory = target.getComponent('minecraft:inventory').component;
+                const inventory = target.getComponent('minecraft:inventory').component;
 
                 for (let i = 0; i < inventory.size; i++) {
-                   inventory.setItem(i);
-                }; 
+                    inventory.setItem(i);
+                };
                 break;
             default:
                 playerBuild.tellSelf(sender, `§cInvalid action. Actions include: §f${actionList.join('§c,§r ')}`); // action.charAt(0).toUpperCase() + action.slice(1);
