@@ -1,6 +1,6 @@
-import { ItemStack, Player, system, world, ChatSendBeforeSignal } from "@minecraft/server";
-import { Database, commandBuild, playerBuild, serverBuild } from "../../library/Minecraft";
-import { configurations } from "../../library/build/configurations.js";
+import { system, world } from "@minecraft/server";
+import { Database, commandBuild, playerBuild, serverBuild } from "../../library/Minecraft.s";
+import { configurations } from "../../library/build/config.js";
 import { gui } from './other/gui.js';
 
 commandBuild.create( // Program incomplete or incorrect 
@@ -20,12 +20,12 @@ commandBuild.create( // Program incomplete or incorrect
         cancel_message: true
     }, 
     /**
-    * @param {ChatSendBeforeEventSignal} data
-    * @param { Array<String>
+    * @param {import('@minecraft/server').ChatSendBeforeEvent} data
+    * @param {Array<String>}
     */
     (data, args) => {
         /**
-        * @type {Player}
+        * @type {import('@minecraft/server').Player}
         */
         const player = data.sender;
         const prefix = configurations.cmd_prefix;
@@ -44,18 +44,16 @@ commandBuild.create( // Program incomplete or incorrect
                 text.push(`§9For Staff Only?: §c${commandFound.is_staff ? '§2Yes' : '§4No'}`);
                 text.push(`§9Cancel Chat Message?: §c${commandFound.cancel_message ? '§2Yes' : '§4No'}`);
 
-                //if (playerBuild.hasTag(configurations.staff_tag) === false) return serverBuild.tellSelf(player, '§cCouldn\'t view the source code as you are not staff.')
+                //if (player.hasTag('test') === false) return player.sendMessage('§cCouldn\'t view the source code as you are not staff.')
                 if (args[1] === 'view_code') {
                     text.push(`§9Callback: \n§r${commandFound.callback.toString()}\n`);
                     text.push(`§9CallbackWM: \n§r${commandFound.callbackWM.toString()}`);
-                }
+                };
             } else text.push(`§cCommand §f${args[0]}§c not found.`);
         } else {
             text.push(`§bList of All Registered Commands:`);
             text.push(`§9Custom Command Prefix: §b${prefix}`);
-            commandBuild.getAllCommands().forEach((command) => {
-                text.push(`§9${command.name}`);
-            });
-        }; serverBuild.tellSelf(player, text.join('\n'));
-    }
+            commandBuild.getAllCommands().forEach((command) => text.push(`§9${command.name}`));
+        }; player.sendMessage(text.join('\n'));
+    };
 );
