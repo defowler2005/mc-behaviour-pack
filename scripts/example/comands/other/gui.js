@@ -1,3 +1,4 @@
+import { world, Player, system } from '@minecraft/server';
 import { commandBuild } from '../../../library/Minecraft.js';
 
 commandBuild.create(
@@ -19,8 +20,8 @@ commandBuild.create(
      */
     (data, args) => {
         const player = data.sender;
-        const message = args.length > 0 ? `[Callback] Hello, world! arguments include: ${args.join(', ')}` : '[Callback] Hello, world!';
-        player.sendMessage(message);
+
+        player.sendMessage('§aMove to show the UI.');
     },
     /**
      * @param {import('@minecraft/server').ChatSendBeforeEvent} data
@@ -28,7 +29,14 @@ commandBuild.create(
      */
     (data, args) => {
         const player = data.sender;
-        const message = args.length > 0 ? `[CallbackWM] Hello, world! arguments include: ${args.join(', ')}` : '[CallbackWM] Hello, world!';
-        player.sendMessage(message);
-    }
+
+       /**
+        * The gui Scheme
+        */
+        const guiScheme = {
+            staff: { },
+            nonstaff: { },
+            welcome: { }
+        };
+    };
 );
