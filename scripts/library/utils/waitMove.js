@@ -6,6 +6,8 @@ import { Player, system } from '@minecraft/server';
  * @param {Number} x - The initial X-coordinate of the target player.
  * @param {Number} y - The initial Y-coordinate of the target player.
  * @param {Number} z - The initial Z-coordinate of the target player.
+ * @example
+ * waitMove(world.getAllPlayers[0], 0, 90, 0, () => { console.warn('Hello, world!') });
  * @param {Function} callback - The callback function to execute after the player moves.
  */
 

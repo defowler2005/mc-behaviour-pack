@@ -1,9 +1,5 @@
-import { Player, CommandResult, world } from "@minecraft/server";
-import { configurations } from "../configurations.js";
+import { system, world } from "@minecraft/server";
 
-/**
- * A class for running server related functions.
- */
 class serverBuilder {
     constructor() {
         /** @type {Array<Player>} */
@@ -12,6 +8,25 @@ class serverBuilder {
         this.allNonStaff = world.getPlayers({ excludeTags: [configurations.staff_tag] });
         /** @type {Array<Player>} */
         this.allPlayers = world.getAllPlayers();
+    };
+
+    /**
+     * Check if the world is ready.
+     * @returns {Boolean} Returns true if the world is ready to run scripts, returns false if the world has not be loaded yet.
+     */
+    isLoaded() {
+        let worldLoaded = false;
+
+        const run = system.runInterval(() => {
+            const overworld = world.getDimension('overworld');
+            const isReady = overworld.runCommand('testfor @a').successCount !== 0;
+
+            if (!worldLoaded && isReady) {
+                worldLoaded = true;
+                console.warn('World ready!');
+                system.clearRun(run);
+            } else if (!isReady) console.warn('World not ready!');
+        }); return worldLoaded;
     };
 
     /**
@@ -61,10 +76,7 @@ class serverBuilder {
         for (const cmd of cmds) {
             commandE = this.dimensions.runCommandAsync(cmd);
         }; return commandE;
-    }
+    };
 };
 
-/**
- * A class for running server related functions.
- */
 export const serverBuild = new serverBuilder();

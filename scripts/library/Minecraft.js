@@ -1,53 +1,39 @@
-import { system, world } from '@minecraft/server';
-import { modules } from './build/configurations.js';
-import { buttonFormData } from './build/classes/buttonFormData.js';
-import { queryFormData } from './build/classes/queryFormData.js';
+import { system } from '@minecraft/server';
 import { commandBuild } from './build/classes/commandBuilder.js';
-import { Database } from './build/classes/databaseBuilder.js';
-import { inputFormData } from './build/classes/inputFormData.js';
-import { playerBuild } from './build/classes/playerBuilder.js';
-import { serverBuild } from './build/classes/serverBuilder.js';
-import { configurations } from './build/configurations.js';
-import { waitMove } from './utils/wait_move.js';
+import { eventBuild } from './build/classes/eventBuilder.js';
+import { config } from './build/config.js';
+import { waitMove } from './utils/waitMove.js';
 
-world.beforeEvents.chatSend.subscribe((data) => {
+eventBuild.addEventListener('chatSend', 'beforeEvent', /** * @param {import('@minecraft/server').ChatSendBeforeEvent} data */(data) => {
     try {
-        const prefix = configurations.cmd_prefix;
-        const sender = data.sender;
         const message = data.message;
-        const { x, y, z } = data.sender.location;
-        const args = message.slice(prefix.length).trim().split(new RegExp(/\s+/));
-        const cmd = args.shift();
-        const command = commandBuild.commands.find(
-            /**
-             * @param {Object} commands - A list of all registered commands.
-             * @param {String} [commands.name] - The name of the command.
-             * @param {Array<String>} [commands.aliases] - Other names for the command.
-             */
-            (commands) => commands.name === cmd || commands.aliases.includes(cmd));
+        const sender = data.sender;
+        const { x, y, z } = sender.location;
+        const prefix = config.cmdChatPrefix;
 
         if (!message.startsWith(prefix)) return; data.cancel = true;
+
+        const args = message.slice(prefix.length).trim().split(new RegExp(/\s+/g));
+        const cmd = args.shift();
+        const command = commandBuild.findCommand(cmd);
+
         if (!command) return sender.sendMessage({ "rawtext": [{ "text": "§c" }, { "translate": "commands.generic.unknown", "with": [`§f${cmd}§c`] }] });
-        if (command.is_staff === true && !playerBuild.hasTag(sender, configurations.staff_tag) && !sender.isOp()) return sender.sendMessage('§cThis command is designed for staff only.');
-        if (command.cancel_message === false) data.cancel = false;
-        if (Database.get(modules.staff[0].module_id) !== 1 && !playerBuild.hasTag(sender, configurations.staff_tag) && !sender.isOp()) return sender.sendMessage('§cPlayer commands are disabled.');
+        data.cancel = command.cancel_message;
+
+        if (command.is_staff && !sender.hasTag('test')) return sender.sendMessage('You don\'t have permission to use this command.');
 
         system.run(() => {
             command.callback(data, args);
-            waitMove(sender, { x, y, z }, () => command.callbackWM(data, args));
-        });
+            waitMove(sender, x, y, z, () => command.callbackWM(data, args));
+        })
     } catch (error) {
-        console.warn(`An error occurred while running Minecraft.js at main command center: ${error}\n${error.stack}`);
-    }
+        console.warn(`An error occured while running main command center: ${error}\n${error.stack}`);
+    };
 });
 
 export {
-    buttonFormData,
-    inputFormData,
-    queryFormData,
-    modules,
     commandBuild,
-    Database,
-    playerBuild,
-    serverBuild
+    config,
+    eventBuild,
+    waitMove,
 };
