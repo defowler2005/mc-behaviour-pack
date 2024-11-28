@@ -36,7 +36,7 @@ export class buttonFormData {
         this.form = new ActionFormData();
 
         /**
-         * @param {import('@minecraft/server').Player} player 
+         * @param {import('@minecraft/server').Player} player
          */
         this.player = player;
     };
