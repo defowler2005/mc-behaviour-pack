@@ -57,10 +57,13 @@ class commandBuilder {
 
     /**
      * Returns all commands that have been registered.
-     * @returns {Array<Object>} - An array containing all registered commands.
+     * @param {boolean} [staffOnly=false] - Indicated wether to return commands for staff members or nonstaff.
+     * @returns {Array<Object>} - The array of command objects.
      */
-    getAllCommands() {
-        return this.commands.length > 0 ? this.commands : 0;
+    getAllCommands(staffOnly = false) {
+        const commands = this.commands.find(((cmd) => cmd.is_staff === staffOnly));
+
+        return commands;
     };
 };
 

@@ -1,5 +1,6 @@
 import { world, Player, system } from '@minecraft/server';
 import { commandBuild } from '../../../library/Minecraft.js';
+import { buttonFormData } from '../../../library/build/classes/buttonFormData.js';
 
 commandBuild.create(
     {
@@ -16,7 +17,7 @@ commandBuild.create(
     },
     /**
      * @param {import('@minecraft/server').ChatSendBeforeEvent} data
-     * @param {Aray<String>} args
+     * @param {Array<String>} args
      */
     (data, args) => {
         const player = data.sender;
@@ -25,7 +26,7 @@ commandBuild.create(
     },
     /**
      * @param {import('@minecraft/server').ChatSendBeforeEvent} data
-     * @param {Aray<String>} args
+     * @param {Array<String>} args
      */
     (data, args) => {
         const player = data.sender;
@@ -34,16 +35,38 @@ commandBuild.create(
          * The gui Scheme
          */
         const guiScheme = {
+
+            /**
+             * The staff UI.
+             */
             staff: {
+
+                /**
+                 * The main menu for staff players.
+                 * @param {import('@minecraft/server').Player} sender 
+                 */
                 main: (sender) => {
-                    
+                    const mainForm = new buttonFormData(sender);
+
+                    mainForm.create(
+                        {
+                            title: 'Main staff menu',
+                            body: [
+                                ['']
+                            ]
+                        }
+                    )
                 }
             },
             nonstaff: {
-                
+                main: (sender) => {
+
+                }
             },
             welcome: {
+                main: (sender) => {
 
+                }
             }
         };
     }

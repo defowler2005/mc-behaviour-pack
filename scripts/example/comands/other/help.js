@@ -1,7 +1,7 @@
 import { commandBuild } from "../../../library/Minecraft.js";
 import { config } from "../../../library/build/config.js";
 
-commandBuild.create( // Program incomplete or incorrect 
+commandBuild.create(// Program incomplete or incorrect 
     {
         name: 'help',
         description: 'Help on how to use a specific command or list all registered commands.',
@@ -19,7 +19,7 @@ commandBuild.create( // Program incomplete or incorrect
     },
     /**
     * @param {import('@minecraft/server').ChatSendBeforeEvent} data
-    * @param {Array<String>}
+    * @param {Array<String>} args
     */
     (data, args) => {
         /**
@@ -36,7 +36,7 @@ commandBuild.create( // Program incomplete or incorrect
                 text.push(`§bCommand Information:`);
                 text.push(`§9Name: §c${commandFound.name}`);
                 text.push(`§9Description: §c${commandFound.description}`);
-                text.push(`§9Aliases: §c${commandFound.aliases.join(', ') || 'None'}`);
+                text.push(`§9Aliases: §c${commandFound.aliases.join('§r, ') || 'None'}`);
                 text.push(`§9Usage: §c${commandFound.usage.join(' §8|§r ') || 'None'}`);
                 text.push(`§9Example: §c${commandFound.example.join(' §8|§r ') || 'None'}`);
                 text.push(`§9For Staff Only?: §c${commandFound.is_staff ? '§2Yes' : '§4No'}`);
@@ -53,5 +53,10 @@ commandBuild.create( // Program incomplete or incorrect
             text.push(`§9Custom Command Prefix: §b${prefix}`);
             commandBuild.getAllCommands().forEach((command) => text.push(`§9${command.name}`));
         }; player.sendMessage(text.join('\n'));
-    }
+    },
+    /**
+    * @param {import('@minecraft/server').ChatSendBeforeEvent} data
+    * @param {Array<String>} args
+    */
+    (data, args) => { }
 );
