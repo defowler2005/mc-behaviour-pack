@@ -30,13 +30,21 @@ commandBuild.create(
     (data, args) => {
         const player = data.sender;
 
-       /**
-        * The gui Scheme
-        */
+        /**
+         * The gui Scheme
+         */
         const guiScheme = {
-            staff: { },
-            nonstaff: { },
-            welcome: { }
+            staff: {
+                main: (sender) => {
+                    
+                }
+            },
+            nonstaff: {
+                
+            },
+            welcome: {
+
+            }
         };
-    };
+    }
 );
